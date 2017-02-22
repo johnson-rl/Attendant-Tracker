@@ -1,3 +1,9 @@
+[Link to the assignment](https://github.com/sf-wdi-34/project-03)
+[link to the trello](https://trello.com/b/vwTcchqU/web-application)
+[Link to Big Calendar Info](https://intljusticemission.github.io/react-big-calendar/examples/index.html)
+[Twilio](https://www.twilio.com/)
+
+
 # Attendant-Tracker
 
 ### User Story
