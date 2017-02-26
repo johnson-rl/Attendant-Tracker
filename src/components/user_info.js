@@ -5,7 +5,7 @@ export default class UserInfo extends Component {
     return (
       <div className=" center-text">
         <div className="row">
-          <img src="https://leafii.com/images/defaultProfilePic.png"/>
+          <img className="profile-image" src="https://leafii.com/images/defaultProfilePic.png"/>
         </div>
         <div className="row">
           <h5>Name of User</h5>

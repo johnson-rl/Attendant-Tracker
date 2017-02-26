@@ -13,3 +13,12 @@
 .list-group-item:hover {
   background-color: rgb(235,235,235);
 }
+
+.profile-image {
+  width: 80%;
+}
+
+.ping {
+  background-color: rgb(255, 100, 100);
+  color: white;
+}
