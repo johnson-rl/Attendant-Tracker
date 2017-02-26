@@ -4,9 +4,9 @@ export default class Welcome extends Component {
   render () {
     return (
       <div>
-        <h2>Welcome to attendant tracker</h2>
-        <img src="http://i.huffpost.com/gen/1321471/images/o-WHEELCHAIR-facebook.jpg" className="welcome-image" />
-        <h4>Helping and communicating through tech!</h4>
+        <h3>Welcome to attendant tracker</h3>
+        <hr></hr>
+        <img src="http://i.huffpost.com/gen/1321471/images/o-WHEELCHAIR-facebook.jpg" alt="Disabled Person having fun outside" className="welcome-image" />
       </div>
     )
   }
