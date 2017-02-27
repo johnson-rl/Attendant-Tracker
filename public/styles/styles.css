@@ -1,0 +1,46 @@
+.welcome-image {
+  width: 100%;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.list-group-item {
+  border: solid black 1px;
+}
+
+.list-group-item:hover {
+  background-color: rgb(235,235,235);
+}
+
+.profile-image {
+  width: 80%;
+}
+
+.ping {
+  background-color: rgb(100,100,255);
+  color: white
+}
+
+.remove-attendant {
+  background-color: rgb(235, 100, 100);
+  color: white;
+}
+
+.remove-attendant-button {
+  margin-top: 50%;
+}
+
+.add-attendant {
+  background-color: rgb(100,205,100);
+  color: white;
+}
+
+.has-danger {
+  background-color: rgb(255,150,150);
+}
+
+.hide {
+  display: none;
+}
