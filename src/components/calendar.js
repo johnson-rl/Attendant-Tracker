@@ -79,6 +79,13 @@ class Calendar extends Component {
   // currentdate.getMonth()
   // currentdate.getFullYear()
   // currentdate.getHours()
+  dayOfWeek = ['Sunday',
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday',
+                    'Saturday']
 
   dayBuilder(date, events) {
     let fullDay = []
@@ -103,6 +110,7 @@ class Calendar extends Component {
         })
       }
     }
+    fullDay.unshift(this.dayOfWeek[events[0].date.getDay()])
     return fullDay
   }
 
@@ -211,15 +219,14 @@ class Calendar extends Component {
           <div className="two columns cal-spacing">
             <h5>Tuesday</h5>
             <hr />
-            <CalendarDay events={events} />
+
           </div>
           <div className="two columns cal-spacing">
             <h5>Wednesday</h5>
             <hr />
           </div>
           <div className="two columns cal-spacing">
-            <h5>Thursday</h5>
-            <hr />
+            <CalendarDay events={events} />
           </div>
           <div className="two columns cal-spacing">
             <h5>Friday</h5>

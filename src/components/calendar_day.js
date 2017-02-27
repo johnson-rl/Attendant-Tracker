@@ -2,7 +2,7 @@ import React from 'react';
 import CalendarEntry from './calendar_entry'
 
 const CalendarDay = ({events}) => {
-  console.log('props', events)
+  const day = events.shift()
   const calendarItems = events.map((event)=> {
     let hour
     if (event.time === 12){
@@ -24,7 +24,7 @@ const CalendarDay = ({events}) => {
 
   return(
     <div>
-      <h5>Sunday</h5>
+      <h5>{day}</h5>
       <hr />
       {calendarItems}
     </div>
