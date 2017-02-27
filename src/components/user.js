@@ -23,6 +23,11 @@ class User extends Component {
     this.delAttendant = this.delAttendant.bind(this);
   }
 
+  componentWillMount(){
+    this.props.fetchUser(this.props.params.id);
+    this.props.fetchAttendants(this.props.params.id)
+  }
+
   componentSwitch() {
     if (this.state.showForm === true) {
       this.setState({
@@ -53,11 +58,6 @@ class User extends Component {
     console.log('he gone!', id)
     this.props.deleteAttendant(id)
 
-  }
-
-  componentWillMount(){
-    this.props.fetchUser(this.props.params.id);
-    this.props.fetchAttendants(this.props.params.id)
   }
 
   render () {
