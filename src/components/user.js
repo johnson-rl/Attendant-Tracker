@@ -42,16 +42,16 @@ class User extends Component {
   }
 
   attendantSwitch() {
-    if (this.state.removeAttendants === true) {
+    if (this.state.removeAttendants === false) {
       this.setState({
-        removeAttendants: false
+        removeAttendants: true
       });
-      this.props.fetchAttendants(this.props.params.id)
     } else {
       this.setState({
-        removedAttendants: true,
+        removedAttendants: false,
       });
     }
+    console.log(this.state.removedAttendants)
   }
 
   delAttendant(id) {
@@ -95,8 +95,9 @@ class User extends Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="four columns">
+          <div className="four columns center-text">
             <UserInfo user={this.props.user}/>
+            <Link to={`/users/${this.props.user.id}/calendar`}><h5>Calendar</h5></Link>
             <Today events={events} />
           </div>
           <div className="eight columns">
