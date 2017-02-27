@@ -1,4 +1,5 @@
 import React from 'react';
+import CalendarEntry from './calendar_entry'
 
 const CalendarDay = (props) => {
   const calendarItems = props.events.map((event)=> {

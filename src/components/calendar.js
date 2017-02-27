@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { fetchUser, fetchAttendants } from '../actions/index';
 
+import CalendarDay from './calendar_day';
+
 class Calendar extends Component {
 
   componentWillMount(){
@@ -11,9 +13,102 @@ class Calendar extends Component {
     this.props.fetchAttendants(this.props.params.id)
   }
 
+  sampleEvents = [
+    {title: "Morning Routine",
+      attendant: {
+        "id": 1,
+        "first_name": "Helper",
+        "last_name": "McGee",
+        "email": "helper@mcgee.com",
+        "phone": "4158753315",
+        "createdAt": "2017-02-25T18:58:17.479Z",
+        "updatedAt": "2017-02-25T18:58:17.621Z",
+        "userId": 1
+      },
+    date: new Date(2017, 2, 2, 8)
+    },
+    {title: "Lunch",
+      attendant: {
+        "id": 2,
+        "first_name": "Attendant",
+        "last_name": "McGoo",
+        "email": "attend@mcgoo.com",
+        "phone": "5148675309",
+        "createdAt": "2017-02-25T19:43:39.439Z",
+        "updatedAt": "2017-02-25T19:43:39.468Z",
+        "userId": 1
+      },
+      date: new Date(2017, 2, 2, 12)
+    },
+    {title: "Dinner",
+      attendant: {
+        "id": 2,
+        "first_name": "Attendant",
+        "last_name": "McGoo",
+        "email": "attend@mcgoo.com",
+        "phone": "5148675309",
+        "createdAt": "2017-02-25T19:43:39.439Z",
+        "updatedAt": "2017-02-25T19:43:39.468Z",
+        "userId": 1
+      },
+      date: new Date(2017, 2, 2, 18)
+    },
+    {title: "Night Routine",
+      attendant: {
+        "id": 1,
+        "first_name": "Helper",
+        "last_name": "McGee",
+        "email": "helper@mcgee.com",
+        "phone": "4158753315",
+        "createdAt": "2017-02-25T18:58:17.479Z",
+        "updatedAt": "2017-02-25T18:58:17.621Z",
+        "userId": 1
+      },
+    date: new Date(2017, 2, 2, 22)
+    }
+  ]
+
+  // DATE FORMAT EXAMPLE
+  // date = new Date(2014, 0, 1, 14);
+  // Wed Jan 01 2014 14:00:00 GMT-0800 (PST)
+
+  // DATE GETTER METHODS
+  // var currentdate = new Date();
+  // currentdate.getDate() // Date of the month
+  // currentdate.getDay()  // Day of the week, Sunday == 0
+  // currentdate.getMonth()
+  // currentdate.getFullYear()
+  // currentdate.getHours()
+
+  dayBuilder(date, events) {
+    let fullDay = []
+    let daysEvents = {}
+    for (let i = 0; i < events.length; i++){
+      daysEvents[events[i].date.getHours()] = events[i]
+    }
+    console.log(daysEvents)
+    for (let i = 5; i <=23; i ++){
+      if (daysEvents[i]){
+        fullDay.push({
+          title: daysEvents[i].title,
+          attendant: daysEvents[i].attendant,
+          time: i
+        })
+      } else {
+        fullDay.push({
+          title: '',
+          attendant: '',
+          time: i
+        })
+      }
+    }
+    console.log(fullDay)
+  }
+
+
 
   render () {
-
+    let events = this.dayBuilder(null, this.sampleEvents)
     return(
       <div className="calendar">
         <div className="row">
@@ -27,7 +122,7 @@ class Calendar extends Component {
             <hr />
             <div className="cal-item">
               <p className="hour-text">5:00am</p>
-              
+
             </div>
             <div className="cal-item">
               <p className="hour-text">6:00am</p>
