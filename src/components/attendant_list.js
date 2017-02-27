@@ -6,14 +6,16 @@ const AttendantList = (props) => {
   const attendants = props.attendants.map((attendant)=> {
     return (
       <AttendantListItem
-        key={attendant.last_name}
-        attendant={attendant} />
+        key={attendant.id}
+        attendant={attendant}
+        removeAttendants={props.removeAttendants}
+        delAttendant={props.delAttendant}
+        />
     )
   })
-
+  
   return (
     <div>
-      <Link to="#ping" className="button ping">Ping Your Network</Link>
       <ul className="list-group">
         {attendants}
       </ul>

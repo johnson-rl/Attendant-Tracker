@@ -1,23 +1,70 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchUser, fetchAttendants, deleteAttendant } from '../actions/index';
+import { Link } from 'react-router';
+import { bindActionCreators } from 'redux';
 
 // Components
 import UserInfo from './user_info'
 import AttendantList from './attendant_list'
 import Today from './today'
+import NewAttendant from './new_attendant'
 
 class User extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showForm: false,
+      removeAttendants: false,
+    };
+    this.componentSwitch = this.componentSwitch.bind(this);
+    this.attendantSwitch = this.attendantSwitch.bind(this);
+    this.delAttendant = this.delAttendant.bind(this);
+  }
+
+  componentSwitch() {
+    if (this.state.showForm === true) {
+      this.setState({
+        showForm: false
+      });
+      this.props.fetchAttendants(this.props.params.id)
+    } else {
+      this.setState({
+        showForm: true,
+      });
+    }
+  }
+
+  attendantSwitch() {
+    if (this.state.removeAttendants === true) {
+      this.setState({
+        removeAttendants: false
+      });
+      this.props.fetchAttendants(this.props.params.id)
+    } else {
+      this.setState({
+        removedAttendants: true,
+      });
+    }
+  }
+
+  delAttendant(id) {
+    console.log('he gone!', id)
+    this.props.deleteAttendant(id)
+
+  }
+
+  componentWillMount(){
+    this.props.fetchUser(this.props.params.id);
+    this.props.fetchAttendants(this.props.params.id)
+  }
+
   render () {
 
-    const attendants = [
-      {first_name: "Shiv",
-      last_name: "Shiv",
-      email: "shiv@shiv.shiv",
-      phone: "415-415-4155"},
-      {first_name: "Mike",
-      last_name: "Mike",
-      email: "mike@mike.mike",
-      phone: "415-415-4155"}
-    ]
+    if(!this.props.user  || !this.props.attendants) {
+      return<div />
+    }
 
     const events = [
       {time: "12:00pm",
@@ -38,15 +85,47 @@ class User extends Component {
       }
     ]
 
+    // const form = (
+    //   <div>
+    //     <NewAttendantForm />
+    //     <button onClick={this.onButtonClick} className="add-attendant">Save</button>
+    //   </div>
+    // )
+
     return (
       <div className="container">
         <div className="row">
           <div className="four columns">
-            <UserInfo />
+            <UserInfo user={this.props.user}/>
             <Today events={events} />
           </div>
           <div className="eight columns">
-            <AttendantList attendants={attendants} />
+            <div className="row">
+              <div className="four columns center-text">
+                <Link to="#ping" className="button ping">Ping Your Network</Link>
+              </div>
+              <div className="four columns center-text">
+                {this.state.showForm ?
+                  <button onClick={this.componentSwitch} className="add-attendant">Cancel</button> :
+                    <button onClick={this.componentSwitch} className="add-attendant">Add Attendant</button>
+                  }
+              </div>
+              <div className="four columns center-text">
+                {this.state.removeAttendants ?
+                  <button onClick={this.attendantSwitch} className="remove-attendant">Cancel</button> :
+                    <button onClick={this.attendantSwitch} className="remove-attendant">Remove Attendant</button>
+                  }
+              </div>
+            </div>
+            <div className="row">
+              {this.state.showForm ?
+                <NewAttendant id={this.props.params.id} componentSwitch={this.componentSwitch}/> :
+                  <AttendantList
+                    attendants={this.props.attendants}
+                    removeAttendants={this.state.removeAttendants}
+                    delAttendant={this.delAttendant}/>
+                }
+            </div>
           </div>
         </div>
       </div>
@@ -55,4 +134,13 @@ class User extends Component {
 }
 
 
-export default User
+function mapStateToProps(state) {
+  return { user: state.user.user,
+            attendants: state.attendants.attendants}
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchUser, fetchAttendants, deleteAttendant }, dispatch); //makes sure action flows to reducers
+}
+// { fetchUser, fetchAttendants }
+export default connect(mapStateToProps, mapDispatchToProps)(User);
