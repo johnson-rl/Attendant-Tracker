@@ -1,12 +1,13 @@
 import React from 'react';
 import CalendarEntry from './calendar_entry'
 
-const CalendarDay = (props) => {
-  const calendarItems = props.events.map((event)=> {
+const CalendarDay = ({events}) => {
+  console.log('props', events)
+  const calendarItems = events.map((event)=> {
     return (
       <CalendarEntry
-        key={event.start_time}
-        time={event.start_time}
+        key={event.time}
+        time={event.time}
         attendant={event.attendant}
         title={event.title}
         />
@@ -21,3 +22,5 @@ const CalendarDay = (props) => {
     </div>
   )
 }
+
+export default CalendarDay

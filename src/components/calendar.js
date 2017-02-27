@@ -97,18 +97,20 @@ class Calendar extends Component {
       } else {
         fullDay.push({
           title: '',
-          attendant: '',
+          attendant: {"first_name": "",
+          "last_name": ""},
           time: i
         })
       }
     }
-    console.log(fullDay)
+    return fullDay
   }
 
 
 
   render () {
     let events = this.dayBuilder(null, this.sampleEvents)
+    console.log(events)
     return(
       <div className="calendar">
         <div className="row">
@@ -209,6 +211,7 @@ class Calendar extends Component {
           <div className="two columns cal-spacing">
             <h5>Tuesday</h5>
             <hr />
+            <CalendarDay events={events} />
           </div>
           <div className="two columns cal-spacing">
             <h5>Wednesday</h5>
