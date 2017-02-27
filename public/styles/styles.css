@@ -44,3 +44,34 @@
 .hide {
   display: none;
 }
+
+.calendar {
+  text-align: center;
+}
+
+.cal-spacing {
+  margin-left: 1%;
+
+  /*border-left: solid lightgrey 1px;
+  border-right: solid lightgrey 1px;*/
+}
+
+.cal-item {
+  border-bottom: solid lightgrey 1px;
+  padding: 5px;
+  margin-bottom: 5px;
+  margin-left: 10%;
+  height: 40px;
+}
+
+.cal-item p {
+  margin-bottom: 0px;
+  font-size: .85em;
+  text-align: right;
+}
+
+.hour-text {
+  color: rgb(155,155,155);
+  float: left;
+
+}
