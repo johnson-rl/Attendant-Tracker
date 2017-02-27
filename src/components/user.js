@@ -48,10 +48,9 @@ class User extends Component {
       });
     } else {
       this.setState({
-        removedAttendants: false,
+        removeAttendants: false,
       });
     }
-    console.log(this.state.removedAttendants)
   }
 
   delAttendant(id) {
