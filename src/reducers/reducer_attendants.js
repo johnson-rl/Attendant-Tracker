@@ -5,7 +5,8 @@ const INITIAL_STATE = { attendants: [], attendant: null}
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
     case FETCH_ATTENDANT:
-    return { ...state, attendant: action.payload.data };
+    console.log('payload', action.payload.data)
+    return { attendant: action.payload.data };
     case FETCH_ATTENDANTS:
       return { ...state, attendants: action.payload.data };
     default:
