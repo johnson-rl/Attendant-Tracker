@@ -12,12 +12,24 @@ const Attendant = DB.models.Attendant;
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+
+// Fires when socket connection made
 io.on('connection', function(socket){
+
   console.log("you're on sockets")
+
+  // fires when room is hit
   socket.on('room', function(data) {
     console.log("you've reached room", data.room)
     socket.join(data.room);
   });
+
+  // first when text is entered
+  socket.on('text', function(data) {
+    socket.broadcast.to(data.room).emit('receive text',
+      data)
+      console.log('some dude wrote', data.text)
+  })
 });
 
 server.listen(3000);
