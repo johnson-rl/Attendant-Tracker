@@ -9,6 +9,20 @@ const DB = require("./db/connection");
 const User = DB.models.User;
 const Attendant = DB.models.Attendant;
 
+
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+io.on('connection', function(socket){
+  console.log("you're on sockets")
+  socket.on('room', function(data) {
+    console.log("you've reached room", data.room)
+    socket.join(data.room);
+  });
+});
+
+server.listen(3000);
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
