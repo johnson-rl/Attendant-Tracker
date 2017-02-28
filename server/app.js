@@ -9,6 +9,10 @@ const DB = require("./db/connection");
 const User = DB.models.User;
 const Attendant = DB.models.Attendant;
 
+
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -100,5 +104,26 @@ app.delete("/api/attendants/:id", function(req, res){
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
+
+// Fires when socket connection made
+io.on('connection', function(socket){
+
+  // console.log("you're on sockets")
+
+  // fires when room is hit
+  socket.on('room', function(data) {
+    // console.log("you've reached room", data.room)
+    socket.join(data.room);
+  });
+
+  // first when text is entered
+  socket.on('text', function(data) {
+    socket.broadcast.to(data.room).emit('receive text',
+      data)
+      // console.log('some dude wrote', data.text)
+  })
+});
+
+server.listen(process.env.PORT || 9000);
 
 module.exports = app;

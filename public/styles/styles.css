@@ -75,3 +75,14 @@
   float: left;
 
 }
+
+.chat-input {
+  width: 100%;
+}
+
+.chat-box {
+  border: solid lightgrey 1px;
+  height: 400px;
+  margin-bottom: 2em;
+  overflow-y: auto;
+}

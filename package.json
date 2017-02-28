@@ -10,7 +10,6 @@
     "body-parser": "^1.16.1",
     "cors": "^2.8.1",
     "express": "^4.14.1",
-    "jquery": "^3.1.1",
     "lodash": "^4.17.4",
     "morgan": "^1.8.1",
     "pg": "^6.1.2",
@@ -22,7 +21,8 @@
     "redux": "^3.6.0",
     "redux-form": "^6.5.0",
     "redux-promise": "^0.5.3",
-    "sequelize": "^3.30.2"
+    "sequelize": "^3.30.2",
+    "socket.io": "^1.7.3"
   },
   "scripts": {
     "start": "react-scripts start",
