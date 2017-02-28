@@ -110,7 +110,7 @@ app.delete("/api/attendants/:id", function(req, res){
 app.get("/api/users/:id/events", function(req, res){
   User.findById(req.params.id).then(function(user){
     console.log(user)
-    user.getEvents().then(function(events){
+    user.getEvents({ include: [ Attendant ] }).then(function(events){
       res.json(events)
     })
   });
