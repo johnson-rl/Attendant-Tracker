@@ -6,10 +6,10 @@ const Event = sequelize.import("../models/events")
 
 Attendant.belongsTo(User);
 User.hasMany(Attendant);
-Event.hasMany(User);
-Event.hasMany(Attendant);
-Attendant.belongsTo(Event);
-User.belongsTo(Event);
+Event.belongsTo(User);
+Event.belongsTo(Attendant);
+Attendant.hasMany(Event);
+User.hasMany(Event);
 
 module.exports = {
   Sequelize: Sequelize,

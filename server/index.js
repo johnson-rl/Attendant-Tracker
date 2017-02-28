@@ -10,6 +10,7 @@ const cors = require('cors');
 const DB = require("./db/connection");
 const User = DB.models.User;
 const Attendant = DB.models.Attendant;
+const Event = DB.models.Event;
 
 
 var server = require('http').createServer(app);
@@ -101,11 +102,46 @@ app.delete("/api/attendants/:id", function(req, res){
   })
 })
 
+////////////////
+//EVENT ROUTES//
+////////////////
+
+// Get all of a User's events
+app.get("/api/users/:id/events", function(req, res){
+  User.findById(req.params.id).then(function(user){
+    console.log(user)
+    user.getEvents().then(function(events){
+      res.json(events)
+    })
+  });
+});
+
+// Create an event
+app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, res){
+  Attendant.findById(req.params.attendant_id).then(function(attendant){
+    User.findById(req.params.user_id).then(function(user){
+      Event.create(req.body).then(function(event){
+        user.addEvent(event)
+        attendant.addEvent(event)
+        res.json(event)
+
+      })
+    })
+  });
+});
+
+///////////////
+//CLIENT-SIDE//
+///////////////
 
 // Redirects all other routes for client side routing
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
+
+///////////
+//SOCKETS//
+///////////
 
 // Fires when socket connection made
 io.on('connection', function(socket){
