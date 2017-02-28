@@ -17,6 +17,11 @@ class App extends Component {
               className="u-pull-right button"
               >Sign Up
             </Link>
+            <Link
+              to="/room"
+              className="u-pull-right button"
+              >Room
+            </Link>
           </nav>
         </div>
         <hr />
