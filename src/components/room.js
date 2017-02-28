@@ -11,6 +11,13 @@ class Room extends Component {
     // binds onInputChange to "this", which in this particular context is SearchBar
     this.onInputChange = this.onInputChange.bind(this);
     // this.onFormSubmit = this.onFormSubmit.bind(this); // also need to bind submit
+    socket.on('receive text', (payload) => {
+        this.updateTextFromSockets(payload);
+      })
+    }
+
+  updateTextFromSockets(payload) {
+    this.setState({term: payload.text})
   }
 
   componentWillMount(){
@@ -19,7 +26,6 @@ class Room extends Component {
   }
 
   onInputChange(event) {
-    console.log(event.target.value);// without next line, state will not update
     this.setState({term: event.target.value})
     socket.emit('text', {
     room: 34,
@@ -30,7 +36,26 @@ class Room extends Component {
   render () {
     return (
       <div>
-        <input onChange={this.onInputChange}/>
+        <div className="container">
+          <div className="row">
+            <div className="eight columns offset-by-two chat-box">
+
+            </div>
+          </div>
+          <div className="row">
+            <div className="one-half column offset-by-three">
+              <textarea
+                className="chat-input"
+                value={this.state.term}
+                onChange={this.onInputChange}
+                />
+            </div>
+          </div>
+          <div className="center-text">
+            <button className="button-primary">Send</button>
+          </div>
+
+        </div>
       </div>
     )
   }

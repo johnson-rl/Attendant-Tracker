@@ -16,11 +16,11 @@ var io = require('socket.io')(server);
 // Fires when socket connection made
 io.on('connection', function(socket){
 
-  console.log("you're on sockets")
+  // console.log("you're on sockets")
 
   // fires when room is hit
   socket.on('room', function(data) {
-    console.log("you've reached room", data.room)
+    // console.log("you've reached room", data.room)
     socket.join(data.room);
   });
 
@@ -28,7 +28,7 @@ io.on('connection', function(socket){
   socket.on('text', function(data) {
     socket.broadcast.to(data.room).emit('receive text',
       data)
-      console.log('some dude wrote', data.text)
+      // console.log('some dude wrote', data.text)
   })
 });
 
