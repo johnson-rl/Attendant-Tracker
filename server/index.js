@@ -13,8 +13,7 @@ const Attendant = DB.models.Attendant;
 const Event = DB.models.Event;
 
 
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -148,27 +147,32 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
 
-///////////
-//SOCKETS//
-///////////
 
-// Fires when socket connection made
-io.on('connection', function(socket){
+DB.sequelize.sync().then(function() {
+  var server = require('http').createServer(app);
+  var io = require('socket.io')(server);
 
-  // console.log("you're on sockets")
+  ///////////
+  //SOCKETS//
+  ///////////
 
-  // fires when room is hit
-  socket.on('room', function(data) {
-    // console.log("you've reached room", data.room)
-    socket.join(data.room);
+  // Fires when socket connection made
+  io.on('connection', function(socket){
+
+    // console.log("you're on sockets")
+
+    // fires when room is hit
+    socket.on('room', function(data) {
+      // console.log("you've reached room", data.room)
+      socket.join(data.room);
+    });
+
+    // first when text is entered
+    socket.on('text', function(data) {
+      socket.broadcast.to(data.room).emit('receive text',
+        data)
+        // console.log('some dude wrote', data.text)
+    })
   });
-
-  // first when text is entered
-  socket.on('text', function(data) {
-    socket.broadcast.to(data.room).emit('receive text',
-      data)
-      // console.log('some dude wrote', data.text)
-  })
+  server.listen(process.env.PORT || 9000);
 });
-
-server.listen(process.env.PORT || 9000);
