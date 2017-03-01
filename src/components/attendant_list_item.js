@@ -11,8 +11,6 @@ class AttendantListItem extends Component  {
 
 
   attendantDelete(id) {
-    // console.log(show);
-    // show = false;
     this.props.delAttendant(id)
     this.setState({
       deleted: true
