@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
-import { fetchUser, fetchAttendants } from '../actions/index';
+import { fetchUser, fetchAttendants, fetchEvents } from '../actions/index';
 
 import CalendarDay from './calendar_day';
 
@@ -11,6 +11,7 @@ class Calendar extends Component {
   componentWillMount(){
     this.props.fetchUser(this.props.params.id);
     this.props.fetchAttendants(this.props.params.id)
+    this.props.fetchEvents(this.props.params.id)
   }
 
   sampleEvents = [
@@ -91,7 +92,8 @@ class Calendar extends Component {
     let fullDay = []
     let daysEvents = {}
     for (let i = 0; i < events.length; i++){
-      daysEvents[events[i].date.getHours()] = events[i]
+      let time = (new Date(events[i].date)).getHours()
+      daysEvents[time] = events[i]
     }
     console.log(daysEvents)
     for (let i = 5; i <=23; i ++){
@@ -110,7 +112,8 @@ class Calendar extends Component {
         })
       }
     }
-    fullDay.unshift(this.dayOfWeek[events[0].date.getDay()])
+    let dayIndex = (new Date(events[0].date)).getDay()
+    fullDay.unshift(this.dayOfWeek[dayIndex])
     return fullDay
   }
 
@@ -118,7 +121,16 @@ class Calendar extends Component {
 
   render () {
     let events = this.dayBuilder(null, this.sampleEvents)
-    console.log(events)
+    let eventsTwo
+    if(this.props.events.length > 0){
+      console.log('props',this.props.events)
+      eventsTwo = this.dayBuilder(null, this.props.events)
+    }
+    if(!eventsTwo){
+      return(<div></div>)
+    }
+    // let eventsTwo = this.dayBuilder(null, this.props.events)
+    console.log('events two', eventsTwo)
     return(
       <div className="calendar">
         <div className="row">
@@ -213,8 +225,7 @@ class Calendar extends Component {
             </div>
           </div>
           <div className="two columns cal-spacing">
-            <h5>Monday</h5>
-            <hr />
+            <CalendarDay events={eventsTwo} />
           </div>
           <div className="two columns cal-spacing">
             <h5>Tuesday</h5>
@@ -244,12 +255,14 @@ class Calendar extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log('state',state.events)
   return { user: state.user.user,
-            attendants: state.attendants.attendants}
+            attendants: state.attendants.attendants,
+            events: state.events.events}
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchUser, fetchAttendants }, dispatch); //makes sure action flows to reducers
+  return bindActionCreators({ fetchUser, fetchAttendants, fetchEvents }, dispatch); //makes sure action flows to reducers
 }
 // { fetchUser, fetchAttendants }
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
