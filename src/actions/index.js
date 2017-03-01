@@ -10,7 +10,7 @@ export const UPDATE_ATTENDANT = 'UPDATE_ATTENDANT';
 const API_KEY = '';
 
 // TODO for api call to backend will need to be changed
-const ROOT_URL = 'http://localhost:9000/api'
+const ROOT_URL = 'https://the-attendant-tracker.herokuapp.com'
 
 // for later when api call with auth
 // const ROOT_URL = `http://api.openweathermap.org/data/2.5/forecast?appid=${API_KEY}`;
