@@ -8,6 +8,7 @@
 
 .list-group-item {
   border: solid black 1px;
+  list-style: none;
 }
 
 .list-group-item:hover {

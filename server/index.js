@@ -70,7 +70,7 @@ app.get("/api/users/:id", function(req, res){
 
 // Get an attendant
 app.get("/api/attendants/:id", function(req, res){
-  Attendant.findById(req.params.id).then(function(attendant){
+  Attendant.findById(req.params.id, { include: [ Event ] } ).then(function(attendant){
     res.json(attendant);
   });
 });

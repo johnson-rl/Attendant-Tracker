@@ -9,7 +9,7 @@ const UserInfo = (user) => {
           <img className="profile-image" src="https://leafii.com/images/defaultProfilePic.png"/>
         </div>
         <div className="row">
-          <h5>Name of User: {user.user.first_name + " " + user.user.last_name}</h5>
+          <h5>{user.user.first_name + " " + user.user.last_name}</h5>
           <p>Other Info of User</p>
         </div>
       </div>

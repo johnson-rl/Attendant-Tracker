@@ -5,7 +5,7 @@ const Today = (props) => {
   const events = props.events.map((event)=> {
     return (
       <CalendarItem
-        key={event.event}
+        key={event.title}
         event={event} />
     )
   })

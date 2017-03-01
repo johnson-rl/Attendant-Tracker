@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 
 import UserInfo from './user_info'
 import CalendarDay from './calendar_day';
+import CalendarItem from './calendar_item'
 
 class Attendant extends Component {
   componentWillMount(){
@@ -17,10 +18,33 @@ class Attendant extends Component {
     if(!this.props.attendant) {
       return<div />
     }
+
+    const attendantEvents = this.props.attendant.events.map((event) => {
+      console.log(event)
+      return (<CalendarItem event={event} />)
+    })
+
     return(
-      <div>
-        <h1>Hi I'm Shiv!</h1>
-        <h3>{this.props.attendant.first_name}</h3>
+      <div className="container">
+        <div className="row">
+          <div className="four columns center-text">
+            <UserInfo user={this.props.attendant}/>
+            <div className="row">
+              <div className="six columns">
+                <Link to="/" className="button add-attendant">Edit</Link>
+              </div>
+              <div className="six columns">
+                <Link to="/" className="button remove-attendant">Delete</Link>
+              </div>
+            </div>
+          </div>
+          <div className="eight columns">
+            <h5>Upcoming Schedule</h5>
+            <hr />
+            {attendantEvents}
+          </div>
+        </div>
+
       </div>
     )
   }

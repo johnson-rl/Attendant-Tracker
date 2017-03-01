@@ -66,21 +66,19 @@ class User extends Component {
     }
 
     const events = [
-      {time: "12:00pm",
-      event: "Lunch",
+      {date: "12:00pm",
+      title: "Lunch",
       attendant: {first_name: "Shiv",
                   last_name: "Shiv",
                   email: "shiv@shiv.shiv",
-                  phone: "415-415-4155"},
-      date: "February 25, 2017"
+                  phone: "415-415-4155"}
       },
-      {time: "6:00pm",
-      event: "Dinner",
+      {date: "6:00pm",
+      title: "Dinner",
       attendant: {first_name: "Mike",
                   last_name: "Mike",
                   email: "mike@mike.mike",
-                  phone: "415-415-4155"},
-                  date: "February 25, 2017"
+                  phone: "415-415-4155"}
       }
     ]
 
