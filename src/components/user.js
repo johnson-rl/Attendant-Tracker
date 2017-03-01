@@ -54,9 +54,7 @@ class User extends Component {
   }
 
   delAttendant(id) {
-    console.log('he gone!', id)
     this.props.deleteAttendant(id)
-
   }
 
   render () {

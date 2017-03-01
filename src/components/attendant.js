@@ -14,6 +14,10 @@ class Attendant extends Component {
     this.props.fetchAttendant(this.props.params.id)
   }
 
+  delAttendant() {
+    this.props.deleteAttendant(this.props.params.id)
+  }
+
   render() {
     if(!this.props.attendant) {
       return<div />
