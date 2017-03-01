@@ -60,7 +60,7 @@ class Room extends Component {
     const sentChats = this.state.chat.map((c, i)=>{
       return (<p key={i}>{c}</p>)
     })
-    
+
     return (
       <div>
         <div className="container">
