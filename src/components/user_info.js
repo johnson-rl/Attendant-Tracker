@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
 const UserInfo = (user) => {
@@ -10,7 +10,8 @@ const UserInfo = (user) => {
         </div>
         <div className="row">
           <h5>{user.user.first_name + " " + user.user.last_name}</h5>
-          <p>Other Info of User</p>
+          <p>{user.user.email}</p>
+          <p>{user.user.phone}</p>
         </div>
       </div>
     )

@@ -94,6 +94,15 @@ app.post("/api/users/:id/attendants", function(req, res){
   });
 });
 
+// Edit an attendant
+
+app.put("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id).then(function(attendant){
+    attendant.update(req.body)
+    res.send(attendant)
+  })
+})
+
 // Delete an attendant
 app.delete("/api/attendants/:id", function(req, res){
   Attendant.findById(req.params.id).then(function(attendant){

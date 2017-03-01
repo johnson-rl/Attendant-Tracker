@@ -6,12 +6,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 class NewAttendant extends Component {
-  static contextTypes = {
-    router: PropTypes.object // defines object on PostNew, will search components until it finds 'router'
-  }; // now we have this.context.router
 
-  onSubmit(props) { // props from form
-    this.props.createAttendant(this.props.id, props) // returns a promis, when resolved, post is saved, and we can reroute
+  onSubmit(props) {
+    this.props.createAttendant(this.props.id, props)
     .then(()=>{
       this.props.componentSwitch()
     })

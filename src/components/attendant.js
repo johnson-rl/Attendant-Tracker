@@ -3,22 +3,24 @@ import { connect } from 'react-redux';
 import { fetchAttendant, deleteAttendant, updateAttendant } from '../actions/index';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
-import {browserHistory} from 'react-router';
 
 import UserInfo from './user_info'
-import CalendarDay from './calendar_day';
 import CalendarItem from './calendar_item'
+import AttendantEdit from './attendant_edit'
 
 class Attendant extends Component {
   constructor(props){
     super(props)
 
     this.state = {
-      deleteCheck : false
+      deleteCheck : false,
+      showForm : false
     }
 
     this.doubleCheck = this.doubleCheck.bind(this)
     this.delAttendant = this.delAttendant.bind(this)
+    this.editSwitch = this.editSwitch.bind(this)
+    this.reFetch = this.reFetch.bind(this)
   }
 
   static contextTypes = {
@@ -26,6 +28,10 @@ class Attendant extends Component {
   };
 
   componentWillMount(){
+    this.props.fetchAttendant(this.props.params.id)
+  }
+
+  reFetch(){
     this.props.fetchAttendant(this.props.params.id)
   }
 
@@ -40,6 +46,19 @@ class Attendant extends Component {
   delAttendant() {
     this.props.deleteAttendant(this.props.params.id)
     this.context.router.push(`/users/${this.props.attendant.userId}`);
+  }
+
+  editSwitch() {
+    if (this.state.showForm === true) {
+      this.setState({
+        showForm: false
+      });
+      this.props.fetchAttendants(this.props.params.id)
+    } else {
+      this.setState({
+        showForm: true,
+      });
+    }
   }
 
   render() {
@@ -79,7 +98,10 @@ class Attendant extends Component {
                 </div>
               : <div>
               <div className="six columns">
-                <Link to="/" className="button add-attendant full-width">Edit</Link>
+                <button to="/"
+                  className="add-attendant full-width"
+                  onClick={this.editSwitch}
+                  >Edit</button>
               </div>
               <div className="six columns">
                 <button
@@ -91,9 +113,17 @@ class Attendant extends Component {
             </div>
           </div>
           <div className="eight columns">
-            <h5>Upcoming Schedule</h5>
-            <hr />
-            {attendantEvents}
+            {this.state.showForm ?
+              <AttendantEdit
+                  attendant={this.props.attendant}
+                  editSwitch={this.editSwitch}
+                  reFetch={this.reFetch}
+                />
+            : <div>
+                <h5>Upcoming Schedule</h5>
+                <hr />
+                {attendantEvents}
+              </div>    }
           </div>
         </div>
 

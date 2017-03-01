@@ -73,8 +73,8 @@ export function deleteAttendant(id) {
   }
 }
 
-export function updateAttendant(id) {
-  const request = axios.delete(`${ROOT_URL}/attendants/${id}`)
+export function updateAttendant(id, props) {
+  const request = axios.put(`${ROOT_URL}/attendants/${id}`, props)
   return {
     type: UPDATE_ATTENDANT,
     payload: request
