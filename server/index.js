@@ -68,9 +68,9 @@ app.get("/api/users/:id", function(req, res){
 //ATTENDANT ROUTES//
 ////////////////////
 
-// Get all attendants
-app.get("/api/attendants", function(req, res){
-  Attendant.findAll().then(function(attendant){
+// Get an attendant
+app.get("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id, { include: [ Event ] } ).then(function(attendant){
     res.json(attendant);
   });
 });
@@ -93,6 +93,15 @@ app.post("/api/users/:id/attendants", function(req, res){
     })
   });
 });
+
+// Edit an attendant
+
+app.put("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id).then(function(attendant){
+    attendant.update(req.body)
+    res.send(attendant)
+  })
+})
 
 // Delete an attendant
 app.delete("/api/attendants/:id", function(req, res){
