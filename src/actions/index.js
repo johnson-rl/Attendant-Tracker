@@ -5,6 +5,7 @@ export const FETCH_ATTENDANTS = 'FETCH_ATTENDANTS'
 export const CREATE_ATTENDANT = 'CREATE_ATTENDANTS';
 export const FETCH_ATTENDANT = 'FETCH_ATTENDANT';
 export const DELETE_ATTENDANT = 'DELETE_ATTENDANT';
+export const UPDATE_ATTENDANT = 'UPDATE_ATTENDANT';
 
 const API_KEY = '';
 
@@ -57,7 +58,7 @@ export function createAttendant(id, props){
 
 export function fetchAttendant(id) {
   const request = axios.get(`${ROOT_URL}/attendants/${id}`)
-
+  console.log('request', request)
   return {
     type: FETCH_ATTENDANT,
     payload: request
@@ -69,5 +70,13 @@ export function deleteAttendant(id) {
   return {
     type: DELETE_ATTENDANT,
     payload: request // don't really need this now, but good to have for consistency and in case it's needed later
+  }
+}
+
+export function updateAttendant(id, props) {
+  const request = axios.put(`${ROOT_URL}/attendants/${id}`, props)
+  return {
+    type: UPDATE_ATTENDANT,
+    payload: request
   }
 }

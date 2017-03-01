@@ -10,6 +10,7 @@ const cors = require('cors');
 const DB = require("./db/connection");
 const User = DB.models.User;
 const Attendant = DB.models.Attendant;
+const Event = DB.models.Event;
 
 
 var server = require('http').createServer(app);
@@ -67,9 +68,9 @@ app.get("/api/users/:id", function(req, res){
 //ATTENDANT ROUTES//
 ////////////////////
 
-// Get all attendants
-app.get("/api/attendants", function(req, res){
-  Attendant.findAll().then(function(attendant){
+// Get an attendant
+app.get("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id, { include: [ Event ] } ).then(function(attendant){
     res.json(attendant);
   });
 });
@@ -93,6 +94,15 @@ app.post("/api/users/:id/attendants", function(req, res){
   });
 });
 
+// Edit an attendant
+
+app.put("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id).then(function(attendant){
+    attendant.update(req.body)
+    res.send(attendant)
+  })
+})
+
 // Delete an attendant
 app.delete("/api/attendants/:id", function(req, res){
   Attendant.findById(req.params.id).then(function(attendant){
@@ -101,11 +111,46 @@ app.delete("/api/attendants/:id", function(req, res){
   })
 })
 
+////////////////
+//EVENT ROUTES//
+////////////////
+
+// Get all of a User's events
+app.get("/api/users/:id/events", function(req, res){
+  User.findById(req.params.id).then(function(user){
+    console.log(user)
+    user.getEvents({ include: [ Attendant ] }).then(function(events){
+      res.json(events)
+    })
+  });
+});
+
+// Create an event
+app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, res){
+  Attendant.findById(req.params.attendant_id).then(function(attendant){
+    User.findById(req.params.user_id).then(function(user){
+      Event.create(req.body).then(function(event){
+        user.addEvent(event)
+        attendant.addEvent(event)
+        res.json(event)
+
+      })
+    })
+  });
+});
+
+///////////////
+//CLIENT-SIDE//
+///////////////
 
 // Redirects all other routes for client side routing
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
+
+///////////
+//SOCKETS//
+///////////
 
 // Fires when socket connection made
 io.on('connection', function(socket){
