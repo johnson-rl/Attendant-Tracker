@@ -44,6 +44,7 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 // Get all users
 app.get("/api/users", function(req, res){
+  console.log('request',req,'response', res)
   User.findAll().then(function(user){
     res.json(user);
   });
