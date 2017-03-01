@@ -8,6 +8,7 @@
 
 .list-group-item {
   border: solid black 1px;
+  list-style: none;
 }
 
 .list-group-item:hover {
@@ -84,5 +85,10 @@
   border: solid lightgrey 1px;
   height: 400px;
   margin-bottom: 2em;
-  overflow-y: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.full-width {
+  width: 90%;
 }
