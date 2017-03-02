@@ -16,10 +16,8 @@ class NewEvent extends Component {
 
   onSubmit(props) {
     console.log(props)
-    // this.props.createEvent(this.props.id, props)
-    // .then(()=>{
-    //
-    // })
+    createEvent(this.props.user_id, props)
+    this.props.refetchEvents()
     this.onSubmit.bind(this)
   }
 
@@ -38,9 +36,12 @@ class NewEvent extends Component {
 
     const { handleSubmit } = this.props;
 
-    const colors = [ { color: 'Red', value: 'ff0000' },
-    { color: 'Green', value: '00ff00' },
-    { color: 'Blue', value: '0000ff' } ]
+    const attendants = this.props.attendants.map((attendant)=> {
+      return {
+        name : attendant.first_name+' '+attendant.last_name,
+        id: attendant.id
+      }
+    })
 
     return (
       <div className="container">
@@ -50,19 +51,19 @@ class NewEvent extends Component {
             <Field name="title" component="input" type="text"/>
           </div>
           <div>
-            <label>Favorite Color</label>
+            <label>Attendant</label>
             <Field
-              name="favoriteColor"
+              name="attendant"
               component={this.renderDropdownList}
-              data={colors}
+              data={attendants}
               valueField="value"
-              textField="color"/>
+              textField="name"/>
           </div>
           <div>
             <label htmlFor="email">Date</label>
             <Field name="date" component={this.dateTime} type="text" className="date-picker" />
           </div>
-          <div className="row">
+          <div className="row event-submit">
             <button type="submit" className="button-primary">Submit</button>
           </div>
         </form>

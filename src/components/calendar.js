@@ -1,17 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
 import { fetchUser, fetchAttendants, fetchEvents } from '../actions/index';
 import EventsNew from './events_new'
 
 import CalendarDay from './calendar_day';
 
+
+
 class Calendar extends Component {
+
+  constructor(props){
+    super(props)
+
+    this.state = {
+      today : new Date(),
+      currentDay : new Date(),
+      show : false
+    }
+
+    this.refetchEvents = this.refetchEvents.bind(this)
+  }
 
   componentWillMount(){
     this.props.fetchUser(this.props.params.id);
     this.props.fetchAttendants(this.props.params.id)
+    this.props.fetchEvents(this.props.params.id)
+  }
+
+  refetchEvents(){
     this.props.fetchEvents(this.props.params.id)
   }
 
@@ -70,17 +87,6 @@ class Calendar extends Component {
     }
   ]
 
-  // DATE FORMAT EXAMPLE
-  // date = new Date(2014, 0, 1, 14);
-  // Wed Jan 01 2014 14:00:00 GMT-0800 (PST)
-
-  // DATE GETTER METHODS
-  // var currentdate = new Date();
-  // currentdate.getDate() // Date of the month
-  // currentdate.getDay()  // Day of the week, Sunday == 0
-  // currentdate.getMonth()
-  // currentdate.getFullYear()
-  // currentdate.getHours()
   dayOfWeek = ['Sunday',
                     'Monday',
                     'Tuesday',
@@ -89,14 +95,61 @@ class Calendar extends Component {
                     'Friday',
                     'Saturday']
 
-  dayBuilder(date, events) {
+  firstDayEvents = []
+  secondDayEvents = []
+  thirdDayEvents = []
+  fourthDayEvents = []
+
+  dateRangeMaker(events){
+    console.log('events',events)
+    let firstDay = []
+    let secondDay = []
+    let thirdDay = []
+    let fourthDay = []
+    let current = new Date(this.state.currentDay)
+    let tomorrow = new Date(this.state.currentDay)
+    let next = new Date(this.state.currentDay)
+    let last = new Date(this.state.currentDay)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    next.setDate(next.getDate()+2)
+    last.setDate(last.getDate()+3)
+    console.log('days', current, tomorrow, next, last)
+    events.forEach((event)=>{
+      console.log('one event', event)
+      let test = (new Date(event.date).toDateString())
+      if (test == current.toDateString()){
+        console.log('today', event)
+        firstDay.push(event)
+      } else if (test == tomorrow.toDateString()){
+        console.log('tomorrow', event)
+        secondDay.push(event)
+      } else if (test == next.toDateString()){
+        console.log('next', event)
+        thirdDay.push(event)
+      } else if (test == last.toDateString()){
+        console.log('last', event)
+        fourthDay.push(event)
+      }
+    })
+    console.log('firstday', firstDay)
+    this.firstDayEvents = this.dayBuilder(firstDay)
+    console.log(this.firstDayEvents)
+    this.secondDayEvents = this.dayBuilder(secondDay)
+    this.thirdDayEvents = this.dayBuilder(thirdDay)
+    this.fourthDayEvents = this.dayBuilder(fourthDay)
+    console.log(this.state.show)
+    this.setState({show:true})
+    console.log(this.state.show)
+  }
+
+  dayBuilder(events) {
     let fullDay = []
     let daysEvents = {}
     for (let i = 0; i < events.length; i++){
       let time = (new Date(events[i].date)).getHours()
       daysEvents[time] = events[i]
     }
-    console.log(daysEvents)
+    // console.log(daysEvents)
     for (let i = 5; i <=23; i ++){
       if (daysEvents[i]){
         fullDay.push({
@@ -121,17 +174,19 @@ class Calendar extends Component {
 
 
   render () {
-    let events = this.dayBuilder(null, this.sampleEvents)
+
+    // let events = this.dayBuilder(this.sampleEvents)
     let eventsTwo
     if(this.props.events.length > 0){
-      console.log('props',this.props.events)
-      eventsTwo = this.dayBuilder(null, this.props.events)
+      // console.log('props',this.props.events)
+      this.dateRangeMaker(this.props.events)
+      eventsTwo = this.dayBuilder(this.props.events)
     }
-    if(!eventsTwo){
+    if(this.state.show === false){
       return(<div></div>)
     }
     // let eventsTwo = this.dayBuilder(null, this.props.events)
-    console.log('events two', eventsTwo)
+    // console.log('events two', eventsTwo)
     return(
       <div className="calendar">
         <div className="row">
@@ -146,10 +201,14 @@ class Calendar extends Component {
           <div className="four columns cal-spacing">
             <h5>Add an event</h5>
             <hr />
-            <EventsNew />
+            <EventsNew
+              attendants={this.props.attendants}
+              user_id={this.props.params.id}
+              refetchEvents={this.refetchEvents}
+              />
           </div>
           <div className="two columns cal-spacing">
-            <CalendarDay events={eventsTwo} />
+            <CalendarDay events={this.firstDayEvents} />
           </div>
           <div className="two columns cal-spacing">
             <h5>Tuesday</h5>
@@ -161,7 +220,7 @@ class Calendar extends Component {
             <hr />
           </div>
           <div className="two columns cal-spacing">
-            <CalendarDay events={events} />
+
           </div>
         </div>
       </div>
@@ -171,7 +230,7 @@ class Calendar extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state',state.events)
+  // console.log('state',state.events)
   return { user: state.user.user,
             attendants: state.attendants.attendants,
             events: state.events.events}

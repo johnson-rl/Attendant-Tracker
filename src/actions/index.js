@@ -6,9 +6,8 @@ export const CREATE_ATTENDANT = 'CREATE_ATTENDANTS';
 export const FETCH_ATTENDANT = 'FETCH_ATTENDANT';
 export const DELETE_ATTENDANT = 'DELETE_ATTENDANT';
 export const UPDATE_ATTENDANT = 'UPDATE_ATTENDANT';
-export const FETCH_EVENTS = 'FETCH_EVENTS'
-
-const API_KEY = '';
+export const FETCH_EVENTS = 'FETCH_EVENTS';
+export const CREATE_EVENTS = 'CREATE_EVENTS';
 
 // TODO for api call to backend will need to be changed
 const ROOT_URL = 'http://localhost:9000/api'
@@ -82,6 +81,16 @@ export function fetchEvents (id) {
 
   return {
     type: FETCH_EVENTS,
+    payload: request
+  }
+}
+
+export function createEvent(id, props){
+  console.log('action props',props.attendant.id)
+  const request = axios.post(`${ROOT_URL}/users/${id}/attendants/${props.attendant.id}/events`, props)
+
+  return {
+    type: CREATE_EVENTS,
     payload: request
   }
 }
