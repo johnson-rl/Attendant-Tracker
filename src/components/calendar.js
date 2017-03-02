@@ -15,11 +15,11 @@ class Calendar extends Component {
 
     this.state = {
       today : new Date(),
-      currentDay : new Date(),
-      firstDayEvents : false
+      currentDay : 0
     }
 
     this.refetchEvents = this.refetchEvents.bind(this)
+    this.onClickHandler = this.onClickHandler.bind(this)
   }
 
   componentWillMount(){
@@ -97,8 +97,8 @@ class Calendar extends Component {
 
   dateRangeMaker(events, i){
     let day = []
-    let current = new Date(this.state.currentDay)
-    current.setDate(current.getDate() + i)
+    let current = new Date(this.state.today)
+    current.setDate(current.getDate() + this.state.currentDay + i)
     console.log('days', current)
     events.forEach((event)=>{
       console.log('one event', event)
@@ -144,7 +144,12 @@ class Calendar extends Component {
     return fullDay
   }
 
-
+  onClickHandler = (e)=>{
+    e.preventDefault()
+    this.setState({
+      currentDay : (this.state.currentDay + 1)
+    })
+  }
 
   render () {
 
@@ -175,7 +180,7 @@ class Calendar extends Component {
             <button>Prev</button>
           </div>
           <div className="two columns offset-by-three">
-            <button>Next</button>
+            <button onClick={this.onClickHandler}>Next</button>
           </div>
         </div>
         <div className="row">
