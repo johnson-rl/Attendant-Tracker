@@ -2,12 +2,13 @@ if (!global.hasOwnProperty('db')) {
   var Sequelize = require('sequelize')
     , sequelize = null
 
-  if (process.env.HEROKU_POSTGRESQL_AMBER_URL) {
+  if (process.env.DATABASE_URL) {
+    console.log("Database URL", DATABASE_URL)
     // the application is executed on Heroku ... use the postgres database
-    sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_AMBER_URL, {
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
       dialect:  'postgres',
       protocol: 'postgres',
-      logging:  true //false
+      logging:  console.log //false
     })
   } else {
     // the application is executed on the local machine ... use mysql
