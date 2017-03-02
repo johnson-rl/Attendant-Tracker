@@ -47,11 +47,12 @@ $ npm server/db/migrate.js
 $ node server
  ```
  
- ## Problems Solved!
+## Problems Solved!
  
- #### Make a Dynamic Planner Style Calendar
  
- Users need to be able to see hourly details about their day, but also need to be able to cycle through days so they can plan out weeks in advance.  I researched several calendar packages, and could not find one that suited these needs adequately, so I decided to build one.  This presented several problems:
+#### Make a Dynamic Planner Style Calendar
+ 
+Users need to be able to see hourly details about their day, but also need to be able to cycle through days so they can plan out weeks in advance.  I researched several calendar packages, and could not find one that suited these needs adequately, so I decided to build one.  This presented several problems:
  
  - Calendar data needed to load from the database
  - Data need to be sorted into the proper days
