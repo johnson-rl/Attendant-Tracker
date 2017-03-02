@@ -3,7 +3,7 @@ if (!global.hasOwnProperty('db')) {
     , sequelize = null
 
   if (process.env.DATABASE_URL) {
-    console.log("Database URL", DATABASE_URL)
+    console.log("Database URL", process.env.DATABASE_URL)
     // the application is executed on Heroku ... use the postgres database
     sequelize = new Sequelize(process.env.DATABASE_URL, {
       dialect:  'postgres',
