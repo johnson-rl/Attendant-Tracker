@@ -1,12 +1,3 @@
-[Link to the assignment](https://github.com/sf-wdi-34/project-03)
-
-[link to the trello](https://trello.com/b/vwTcchqU/web-application)
-
-[Link to Big Calendar Info](https://intljusticemission.github.io/react-big-calendar/examples/index.html)
-
-[Twilio](https://www.twilio.com/)
-
-
 # Attendant-Tracker
 
 ### User Story
@@ -25,3 +16,98 @@ Furthermore, any time a scheduling change occurs--an attendant gets sick, a disa
 Attendant Tracker is an app that will make all of this possible and easy.  It will allow for easy attendant scheduling and automatic calendar notification.  It will keep track of hours worked to facilitate paying attendants and printing and submitting records.  
 
 Plus at the click of a button, someone can send a message to her entire network seeking last minute help.  That message will contain a link to a chat room only visible by the user and her network where she can discuss needs in real time and her attendants can communicate about their availability to help.
+
+### Technologies:
+
+- ES6
+- React
+- Redux
+- Node
+- Express
+- PostgreSQL
+- Sequelize
+- Socket.io
+- Twilio
+
+### Installation
+
+Dependencies:
+
+- Node.js
+- PostgreSQL
+
+Steps to Install
+
+1. Download or clone this repository
+2. Run:
+```
+$ npm install
+$ createdb attendant 
+$ npm server/db/migrate.js
+$ node server
+ ```
+ 
+ ## Problems Solved!
+ 
+ #### Make a Dynamic Planner Style Calendar
+ 
+ Users need to be able to see hourly details about their day, but also need to be able to cycle through days so they can plan out weeks in advance.  I researched several calendar packages, and could not find one that suited these needs adequately, so I decided to build one.  This presented several problems:
+ 
+ - Calendar data needed to load from the database
+ - Data need to be sorted into the proper days
+ - Calander days needed to render dynamically allowing the user to cycle through days
+ 
+The two functions below do the heavy lifting in this app, first filtering events by a given date, then creating an array of hours that is then fed to indivual calendar entry components.  This allows the user to view calendar entries on any date past or present.
+
+```
+  dateRangeMaker(events, i){
+    let day = []
+    let current = new Date(this.state.today)
+    current.setDate(current.getDate() + this.state.currentDay + i)
+    events.forEach((event)=>{
+      let test = (new Date(event.date).toDateString())
+      if (test == current.toDateString()){
+        day.push(event)
+      }
+    })
+    if (day.length === 0){
+      day.push({date: current, attendant: {first_name: '', last_name: ''}, title: ''})
+    }
+    return this.dayBuilder(day)
+  }
+
+  dayBuilder(events) {
+    let fullDay = []
+    let daysEvents = {}
+    for (let i = 0; i < events.length; i++){
+      let time = (new Date(events[i].date)).getHours()
+      daysEvents[time] = events[i]
+    }
+    for (let i = 5; i <=23; i ++){
+      if (daysEvents[i]){
+        fullDay.push({
+          title: daysEvents[i].title,
+          attendant: daysEvents[i].attendant,
+          time: i
+        })
+      } else {
+        fullDay.push({
+          title: '',
+          attendant: {"first_name": "",
+          "last_name": ""},
+          time: i
+        })
+      }
+    }
+    let dayIndex = (new Date(events[0].date)).getDay()
+    fullDay.unshift(this.dayOfWeek[dayIndex])
+    console.log(fullDay)
+    return fullDay
+  }
+  ```
+ 
+Link to your wireframes – sketches of major views / interfaces in your application.
+Link to your entity relationship diagrams – plan out your data relationships before coding.
+Descriptions of any unsolved problems or future features.
+
+[link to the trello](https://trello.com/b/vwTcchqU/web-application)
