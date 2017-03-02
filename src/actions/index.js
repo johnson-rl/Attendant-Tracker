@@ -6,8 +6,8 @@ export const CREATE_ATTENDANT = 'CREATE_ATTENDANTS';
 export const FETCH_ATTENDANT = 'FETCH_ATTENDANT';
 export const DELETE_ATTENDANT = 'DELETE_ATTENDANT';
 export const UPDATE_ATTENDANT = 'UPDATE_ATTENDANT';
-
-const API_KEY = '';
+export const FETCH_EVENTS = 'FETCH_EVENTS';
+export const CREATE_EVENTS = 'CREATE_EVENTS';
 
 // TODO for api call to backend will need to be changed
 const ROOT_URL = 'http://localhost:9000/api'
@@ -23,18 +23,11 @@ export function fetchUser(id) {
   let request = null
   request = axios.get(url)
 
-  // .then(function (response){
-  //   console.log(response)
-  //   request = response
-  // })  // this makes the ajax call
   return {
     type: FETCH_USER,
     payload: request
   };
-
-
 }
-
 
 
 export function fetchAttendants (id) {
@@ -58,7 +51,7 @@ export function createAttendant(id, props){
 
 export function fetchAttendant(id) {
   const request = axios.get(`${ROOT_URL}/attendants/${id}`)
-  console.log('request', request)
+
   return {
     type: FETCH_ATTENDANT,
     payload: request
@@ -67,6 +60,7 @@ export function fetchAttendant(id) {
 
 export function deleteAttendant(id) {
   const request = axios.delete(`${ROOT_URL}/attendants/${id}`)
+
   return {
     type: DELETE_ATTENDANT,
     payload: request // don't really need this now, but good to have for consistency and in case it's needed later
@@ -75,8 +69,28 @@ export function deleteAttendant(id) {
 
 export function updateAttendant(id, props) {
   const request = axios.put(`${ROOT_URL}/attendants/${id}`, props)
+
   return {
     type: UPDATE_ATTENDANT,
+    payload: request
+  }
+}
+
+export function fetchEvents (id) {
+  const request = axios.get(`${ROOT_URL}/users/${id}/events`)
+
+  return {
+    type: FETCH_EVENTS,
+    payload: request
+  }
+}
+
+export function createEvent(id, props){
+  console.log('action props',props.attendant.id)
+  const request = axios.post(`${ROOT_URL}/users/${id}/attendants/${props.attendant.id}/events`, props)
+
+  return {
+    type: CREATE_EVENTS,
     payload: request
   }
 }
