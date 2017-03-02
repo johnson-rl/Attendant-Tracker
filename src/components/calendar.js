@@ -6,8 +6,6 @@ import EventsNew from './events_new'
 
 import CalendarDay from './calendar_day';
 
-
-
 class Calendar extends Component {
 
   constructor(props){
@@ -19,7 +17,8 @@ class Calendar extends Component {
     }
 
     this.refetchEvents = this.refetchEvents.bind(this)
-    this.onClickHandler = this.onClickHandler.bind(this)
+    this.countDaysUp = this.countDaysUp.bind(this)
+    this.countDaysDown = this.countDaysDown.bind(this)
   }
 
   componentWillMount(){
@@ -31,61 +30,6 @@ class Calendar extends Component {
   refetchEvents(){
     this.props.fetchEvents(this.props.params.id)
   }
-
-  sampleEvents = [
-    {title: "Morning Routine",
-      attendant: {
-        "id": 1,
-        "first_name": "Helper",
-        "last_name": "McGee",
-        "email": "helper@mcgee.com",
-        "phone": "4158753315",
-        "createdAt": "2017-02-25T18:58:17.479Z",
-        "updatedAt": "2017-02-25T18:58:17.621Z",
-        "userId": 1
-      },
-    date: new Date(2017, 2, 2, 8)
-    },
-    {title: "Lunch",
-      attendant: {
-        "id": 2,
-        "first_name": "Attendant",
-        "last_name": "McGoo",
-        "email": "attend@mcgoo.com",
-        "phone": "5148675309",
-        "createdAt": "2017-02-25T19:43:39.439Z",
-        "updatedAt": "2017-02-25T19:43:39.468Z",
-        "userId": 1
-      },
-      date: new Date(2017, 2, 2, 12)
-    },
-    {title: "Dinner",
-      attendant: {
-        "id": 2,
-        "first_name": "Attendant",
-        "last_name": "McGoo",
-        "email": "attend@mcgoo.com",
-        "phone": "5148675309",
-        "createdAt": "2017-02-25T19:43:39.439Z",
-        "updatedAt": "2017-02-25T19:43:39.468Z",
-        "userId": 1
-      },
-      date: new Date(2017, 2, 2, 18)
-    },
-    {title: "Night Routine",
-      attendant: {
-        "id": 1,
-        "first_name": "Helper",
-        "last_name": "McGee",
-        "email": "helper@mcgee.com",
-        "phone": "4158753315",
-        "createdAt": "2017-02-25T18:58:17.479Z",
-        "updatedAt": "2017-02-25T18:58:17.621Z",
-        "userId": 1
-      },
-    date: new Date(2017, 2, 2, 22)
-    }
-  ]
 
   dayOfWeek = ['Sunday',
                     'Monday',
@@ -144,43 +88,46 @@ class Calendar extends Component {
     return fullDay
   }
 
-  onClickHandler = (e)=>{
+  countDaysUp = (e)=>{
     e.preventDefault()
     this.setState({
       currentDay : (this.state.currentDay + 1)
     })
   }
 
+  countDaysDown = (e)=>{
+    e.preventDefault()
+    this.setState({
+      currentDay : (this.state.currentDay - 1)
+    })
+  }
+
   render () {
 
-    let events = this.dayBuilder(this.sampleEvents)
-    let eventsTwo
     let firstDayEvents = []
     let secondDayEvents = []
     let thirdDayEvents = []
     let fourthDayEvents = []
+
     if(this.props.events.length > 0){
-      // console.log('props',this.props.events)
       firstDayEvents = this.dateRangeMaker(this.props.events, 0)
       secondDayEvents = this.dateRangeMaker(this.props.events, 1)
       thirdDayEvents = this.dateRangeMaker(this.props.events, 2)
       fourthDayEvents = this.dateRangeMaker(this.props.events, 3)
-      // this.dateRangeMaker(this.props.events)
-      // eventsTwo = this.dayBuilder(this.props.events)
     }
+
     if(firstDayEvents.length === 0 || secondDayEvents.length === 0 || thirdDayEvents.length === 0 || fourthDayEvents.length === 0){
       return(<div></div>)
     }
-    // let eventsTwo = this.dayBuilder(this.props.events)
-    console.log('DISPLAY THIS', firstDayEvents)
+
     return(
       <div className="calendar">
         <div className="row">
           <div className="two columns offset-by-four">
-            <button>Prev</button>
+            <button onClick={this.countDaysDown}>Prev</button>
           </div>
           <div className="two columns offset-by-three">
-            <button onClick={this.onClickHandler}>Next</button>
+            <button onClick={this.countDaysUp}>Next</button>
           </div>
         </div>
         <div className="row">
