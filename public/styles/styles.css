@@ -92,3 +92,8 @@
 .full-width {
   width: 90%;
 }
+
+th,
+td {
+  padding: 0px;
+ }
