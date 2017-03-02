@@ -16,7 +16,7 @@ class Calendar extends Component {
     this.state = {
       today : new Date(),
       currentDay : new Date(),
-      show : false
+      firstDayEvents : false
     }
 
     this.refetchEvents = this.refetchEvents.bind(this)
@@ -95,51 +95,24 @@ class Calendar extends Component {
                     'Friday',
                     'Saturday']
 
-  firstDayEvents = []
-  secondDayEvents = []
-  thirdDayEvents = []
-  fourthDayEvents = []
-
-  dateRangeMaker(events){
-    console.log('events',events)
-    let firstDay = []
-    let secondDay = []
-    let thirdDay = []
-    let fourthDay = []
+  dateRangeMaker(events, i){
+    let day = []
     let current = new Date(this.state.currentDay)
-    let tomorrow = new Date(this.state.currentDay)
-    let next = new Date(this.state.currentDay)
-    let last = new Date(this.state.currentDay)
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    next.setDate(next.getDate()+2)
-    last.setDate(last.getDate()+3)
-    console.log('days', current, tomorrow, next, last)
+    current.setDate(current.getDate() + i)
+    console.log('days', current)
     events.forEach((event)=>{
       console.log('one event', event)
       let test = (new Date(event.date).toDateString())
       if (test == current.toDateString()){
         console.log('today', event)
-        firstDay.push(event)
-      } else if (test == tomorrow.toDateString()){
-        console.log('tomorrow', event)
-        secondDay.push(event)
-      } else if (test == next.toDateString()){
-        console.log('next', event)
-        thirdDay.push(event)
-      } else if (test == last.toDateString()){
-        console.log('last', event)
-        fourthDay.push(event)
+        day.push(event)
       }
     })
-    console.log('firstday', firstDay)
-    this.firstDayEvents = this.dayBuilder(firstDay)
-    console.log(this.firstDayEvents)
-    this.secondDayEvents = this.dayBuilder(secondDay)
-    this.thirdDayEvents = this.dayBuilder(thirdDay)
-    this.fourthDayEvents = this.dayBuilder(fourthDay)
-    console.log(this.state.show)
-    this.setState({show:true})
-    console.log(this.state.show)
+    if (day.length === 0){
+      day.push({date: current})
+    }
+    console.log('day', day)
+    return this.dayBuilder(day)
   }
 
   dayBuilder(events) {
@@ -175,18 +148,26 @@ class Calendar extends Component {
 
   render () {
 
-    // let events = this.dayBuilder(this.sampleEvents)
+    let events = this.dayBuilder(this.sampleEvents)
     let eventsTwo
+    let firstDayEvents = []
+    let secondDayEvents = []
+    let thirdDayEvents = []
+    let fourthDayEvents = []
     if(this.props.events.length > 0){
       // console.log('props',this.props.events)
-      this.dateRangeMaker(this.props.events)
-      eventsTwo = this.dayBuilder(this.props.events)
+      firstDayEvents = this.dateRangeMaker(this.props.events, 0)
+      secondDayEvents = this.dateRangeMaker(this.props.events, 1)
+      thirdDayEvents = this.dateRangeMaker(this.props.events, 2)
+      fourthDayEvents = this.dateRangeMaker(this.props.events, 3)
+      // this.dateRangeMaker(this.props.events)
+      // eventsTwo = this.dayBuilder(this.props.events)
     }
-    if(this.state.show === false){
+    if(firstDayEvents.length === 0 || secondDayEvents.length === 0 || thirdDayEvents.length === 0 || fourthDayEvents.length === 0){
       return(<div></div>)
     }
-    // let eventsTwo = this.dayBuilder(null, this.props.events)
-    // console.log('events two', eventsTwo)
+    // let eventsTwo = this.dayBuilder(this.props.events)
+    console.log('DISPLAY THIS', firstDayEvents)
     return(
       <div className="calendar">
         <div className="row">
@@ -208,19 +189,16 @@ class Calendar extends Component {
               />
           </div>
           <div className="two columns cal-spacing">
-            <CalendarDay events={this.firstDayEvents} />
+            <CalendarDay events={firstDayEvents} />
           </div>
           <div className="two columns cal-spacing">
-            <h5>Tuesday</h5>
-            <hr />
-
+            <CalendarDay events={secondDayEvents} />
           </div>
           <div className="two columns cal-spacing">
-            <h5>Wednesday</h5>
-            <hr />
+            <CalendarDay events={thirdDayEvents} />
           </div>
           <div className="two columns cal-spacing">
-
+            <CalendarDay events={fourthDayEvents} />
           </div>
         </div>
       </div>
