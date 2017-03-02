@@ -7,7 +7,7 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_EVENTS:
       return { events: action.payload.data };
     case CREATE_EVENTS:
-      return { ...state, events: action.payload.data }
+      return { events: action.payload.data }
     default:
      return state;
   }

@@ -87,7 +87,6 @@ export function fetchEvents (id) {
 }
 
 export function createEvent(id, props){
-  console.log('action props',props.attendant.id)
   const request = axios.post(`${ROOT_URL}/users/${id}/attendants/${props.attendant.id}/events`, props)
 
   return {
@@ -97,7 +96,6 @@ export function createEvent(id, props){
 }
 
 export function sendSms(props){
-  console.log(props)
   const request = axios.post(`${ROOT_URL}/sms`, props)
 
   return {

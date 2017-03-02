@@ -13,7 +13,7 @@ class App extends Component {
               >Profile
             </Link>
             <Link
-              to="/signup"
+              to="/"
               className="u-pull-right button"
               >Logout
             </Link>

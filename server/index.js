@@ -133,8 +133,9 @@ app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, re
       Event.create(req.body).then(function(event){
         user.addEvent(event)
         attendant.addEvent(event)
-        res.json(event)
-
+        user.getEvents({ include: [ Attendant ] }).then(function(events){
+          res.json(events)
+        })
       })
     })
   });

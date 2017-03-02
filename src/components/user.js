@@ -96,7 +96,9 @@ class User extends Component {
       <div className="container">
         <div className="row">
           <div className="four columns center-text">
-            <UserInfo user={this.props.user}/>
+            <UserInfo
+              user={this.props.user}
+              image="http://www.thefamouspeople.com/profiles/images/stephen-hawking-4.jpg"/>
             <Link to={`/users/${this.props.user.id}/calendar`}><h5>Calendar</h5></Link>
             <Today events={events} />
           </div>
