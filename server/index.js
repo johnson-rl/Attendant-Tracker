@@ -139,6 +139,14 @@ app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, re
   });
 });
 
+// Delete an event
+app.delete('/api/events/:id', function(req, res){
+  Event.findById(req.params.id).then(function(event){
+    event.destroy()
+    res.json(event)
+  })
+})
+
 ///////////////
 //CLIENT-SIDE//
 ///////////////
