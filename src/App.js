@@ -10,17 +10,12 @@ class App extends Component {
             <Link
               to="/users/1"
               className="u-pull-right button"
-              >Log In
+              >Profile
             </Link>
             <Link
               to="/signup"
               className="u-pull-right button"
-              >Sign Up
-            </Link>
-            <Link
-              to="/room"
-              className="u-pull-right button"
-              >Room
+              >Logout
             </Link>
           </nav>
         </div>

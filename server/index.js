@@ -13,13 +13,14 @@ const Attendant = DB.models.Attendant;
 const Event = DB.models.Event;
 
 
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var corsOptions = {
+const corsOptions = {
   origin: '*',
   allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -147,15 +148,6 @@ app.delete('/api/events/:id', function(req, res){
   })
 })
 
-///////////////
-//CLIENT-SIDE//
-///////////////
-
-// Redirects all other routes for client side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
-});
-
 ///////////
 //SOCKETS//
 ///////////
@@ -177,6 +169,38 @@ io.on('connection', function(socket){
       data)
       // console.log('some dude wrote', data.text)
   })
+});
+
+/////////
+///SMS///
+/////////
+
+const accountSid = 'AC5459c1ddde19ed22e8db467867bf3b68'; // Your Account SID from www.twilio.com/console
+const authToken = '840f248a395dcb634d86e0d7ef66df36';   // Your Auth Token from www.twilio.com/console
+
+const twilio = require('twilio');
+const client = new twilio.RestClient(accountSid, authToken);
+
+app.post('/api/sms', (req, res)=> {
+  client.messages.create({
+      body: req.body.message || 'hello from twilio',
+      to: '+14158899041',  // Text this number
+      from: '+14152003673 ' // From a valid Twilio number
+  }, function(err, message) {
+      console.log(message.sid);
+  });
+  res.send('sent')
+})
+
+
+
+///////////////
+//CLIENT-SIDE//
+///////////////
+
+// Redirects all other routes for client side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
 
 server.listen(process.env.PORT || 9000);

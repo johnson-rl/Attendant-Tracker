@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchUser, fetchAttendants, deleteAttendant } from '../actions/index';
+import { fetchUser, fetchAttendants, deleteAttendant, sendSms } from '../actions/index';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 
@@ -21,7 +21,12 @@ class User extends Component {
     this.componentSwitch = this.componentSwitch.bind(this);
     this.attendantSwitch = this.attendantSwitch.bind(this);
     this.delAttendant = this.delAttendant.bind(this);
+    this.pingNetwork = this.pingNetwork.bind(this)
   }
+
+  static contextTypes = {
+    router: PropTypes.object
+  };
 
   componentWillMount(){
     this.props.fetchUser(this.props.params.id);
@@ -57,6 +62,13 @@ class User extends Component {
     this.props.deleteAttendant(id)
   }
 
+  pingNetwork(){
+    let room = Math.floor(Math.random() * 1000000000)
+    console.log(room)
+    this.props.sendSms({message: `Hey this is ${this.props.user.first_name}! I could use some assistance.  Chat with me here: http://localhost:9000/room/${room}`})
+    this.context.router.push(`/room/${room}`)
+  }
+
   render () {
 
     if(!this.props.user  || !this.props.attendants) {
@@ -80,13 +92,6 @@ class User extends Component {
       }
     ]
 
-    // const form = (
-    //   <div>
-    //     <NewAttendantForm />
-    //     <button onClick={this.onButtonClick} className="add-attendant">Save</button>
-    //   </div>
-    // )
-
     return (
       <div className="container">
         <div className="row">
@@ -98,7 +103,9 @@ class User extends Component {
           <div className="eight columns">
             <div className="row">
               <div className="four columns center-text">
-                <Link to="#ping" className="button ping">Ping Your Network</Link>
+                <button
+                  onClick={this.pingNetwork}
+                  className="ping">Ping Your Network</button>
               </div>
               <div className="four columns center-text">
                 {this.state.showForm ?
@@ -136,7 +143,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchUser, fetchAttendants, deleteAttendant }, dispatch); //makes sure action flows to reducers
+  return bindActionCreators({ fetchUser, fetchAttendants, deleteAttendant, sendSms }, dispatch); //makes sure action flows to reducers
 }
 // { fetchUser, fetchAttendants }
 export default connect(mapStateToProps, mapDispatchToProps)(User);
