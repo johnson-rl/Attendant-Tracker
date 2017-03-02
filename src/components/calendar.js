@@ -43,19 +43,16 @@ class Calendar extends Component {
     let day = []
     let current = new Date(this.state.today)
     current.setDate(current.getDate() + this.state.currentDay + i)
-    console.log('days', current)
     events.forEach((event)=>{
-      console.log('one event', event)
       let test = (new Date(event.date).toDateString())
       if (test == current.toDateString()){
-        console.log('today', event)
         day.push(event)
       }
     })
     if (day.length === 0){
-      day.push({date: current})
+      day.push({date: current, attendant: {first_name: '', last_name: ''}, title: ''})
     }
-    console.log('day', day)
+    // console.log('day', day)
     return this.dayBuilder(day)
   }
 
@@ -85,6 +82,7 @@ class Calendar extends Component {
     }
     let dayIndex = (new Date(events[0].date)).getDay()
     fullDay.unshift(this.dayOfWeek[dayIndex])
+    console.log(fullDay)
     return fullDay
   }
 
