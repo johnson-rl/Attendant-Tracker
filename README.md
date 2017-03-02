@@ -106,9 +106,62 @@ The two functions below do the heavy lifting in this app, first filtering events
     return fullDay
   }
   ```
- 
-Link to your wireframes – sketches of major views / interfaces in your application.
-Link to your entity relationship diagrams – plan out your data relationships before coding.
-Descriptions of any unsolved problems or future features.
+
+#### Allow the User to Communicate With the Whole Network of Attendants
+
+I wanted a way for a user to reach out to all of their helpers that was secure and efficient.  I determined the best method for accomplishing this is by building a chat service into the app.  I used socket.io which was really straightforward and worked wonderfully!  Below is the code running in the client side chat room, and then the code running on the server.
+
+```
+// Connect to the room
+
+componentWillMount(){
+    socket.emit('room', {room: 34})
+  }
+  
+// Receive Messages 
+
+socket.on('receive text', (payload) => {
+        this.updateTextFromSockets(payload);
+      })
+
+// Send Messages
+
+  onInputSubmit() {
+    socket.emit('text', {
+      room: this.props.params.id,
+      text: this.state.term
+      })
+    this.setState({chat: [...this.state.chat, this.state.term], term: ""})
+  }
+```
+```
+// Server Set Up
+
+io.on('connection', function(socket){
+
+  // fires when room is hit
+  socket.on('room', function(data) {
+    socket.join(data.room);
+  });
+
+  // fires when text is entered
+  socket.on('text', function(data) {
+    socket.broadcast.to(data.room).emit('receive text',
+      data)
+  })
+});
+
+```
+
+### Future Steps
+
+1. Configure a better login system
+2. Allow events to print as the official IHSS form
+3. Add anonomous user names to the chat room
+4. Allow user to customize messages sent via the ping text
+5. Allow user to make sub groups of attendants
+6. Fully CRUD Events
+7. Build a mobile app version!!!!!
+
 
 [link to the trello](https://trello.com/b/vwTcchqU/web-application)
