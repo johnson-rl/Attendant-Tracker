@@ -28,7 +28,6 @@ class Calendar extends Component {
   }
 
   refetchEvents(){
-    console.log('refetch')
     this.props.fetchEvents(this.props.params.id)
     CalendarDay.forceUpdate()
     EventsNew.forceUpdate()
@@ -53,7 +52,8 @@ class Calendar extends Component {
       }
     })
     if (day.length === 0){
-      day.push({date: current, attendant: {first_name: '', last_name: ''}, title: ''})
+      console.log('current', current)
+      day.push({date: current, Attendant: {first_name: '', last_name: ''}, title: ''})
     }
     return this.dayBuilder(day)
   }
@@ -67,23 +67,24 @@ class Calendar extends Component {
     }
     for (let i = 5; i <=23; i ++){
       if (daysEvents[i]){
+        // console.log(daysEvents[i])
         fullDay.push({
           title: daysEvents[i].title,
-          attendant: daysEvents[i].attendant,
+          attendant: daysEvents[i].Attendant,
           time: i
         })
       } else {
         fullDay.push({
           title: '',
-          attendant: {"first_name": "",
-          "last_name": ""},
+          attendant: {first_name: "",
+          last_name: ""},
           time: i
         })
       }
     }
     let dayIndex = (new Date(events[0].date)).getDay()
     fullDay.unshift(this.dayOfWeek[dayIndex])
-    console.log(fullDay)
+    console.log('fullDay', fullDay) // used for cal debugging
     return fullDay
   }
 

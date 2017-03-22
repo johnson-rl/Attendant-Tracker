@@ -53,7 +53,7 @@ class Attendant extends Component {
       this.setState({
         showForm: false
       });
-      this.props.fetchAttendants(this.props.params.id)
+      this.props.fetchAttendant(this.props.params.id)
     } else {
       this.setState({
         showForm: true,
