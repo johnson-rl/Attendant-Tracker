@@ -13,13 +13,14 @@ const Attendant = DB.models.Attendant;
 const Event = DB.models.Event;
 
 
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var corsOptions = {
+const corsOptions = {
   origin: '*',
   allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -132,8 +133,9 @@ app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, re
       Event.create(req.body).then(function(event){
         user.addEvent(event)
         attendant.addEvent(event)
-        res.json(event)
-
+        user.getEvents({ include: [ Attendant ] }).then(function(events){
+          res.json(events)
+        })
       })
     })
   });
@@ -147,6 +149,47 @@ app.delete('/api/events/:id', function(req, res){
   })
 })
 
+///////////
+//SOCKETS//
+///////////
+
+io.on('connection', function(socket){
+
+  // fires when room is hit
+  socket.on('room', function(data) {
+    socket.join(data.room);
+  });
+
+  // fires when text is entered
+  socket.on('text', function(data) {
+    socket.broadcast.to(data.room).emit('receive text',
+      data)
+  })
+});
+
+/////////
+///SMS///
+/////////
+
+const accountSid = process.env.TWILIO_KEY;
+const authToken = process.env.TWILIO_TOKEN;
+
+const twilio = require('twilio');
+const client = new twilio.RestClient(accountSid, authToken);
+
+app.post('/api/sms', (req, res)=> {
+  client.messages.create({
+      body: req.body.message || 'hello from twilio',
+      to: process.env.RECIPIENT_NUMBER,
+      from: process.env.TWILIO_NUMBER
+  }, function(err, message) {
+      console.log(message.sid);
+  });
+  res.send('sent')
+})
+
+
+
 ///////////////
 //CLIENT-SIDE//
 ///////////////
@@ -154,29 +197,6 @@ app.delete('/api/events/:id', function(req, res){
 // Redirects all other routes for client side routing
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
-});
-
-///////////
-//SOCKETS//
-///////////
-
-// Fires when socket connection made
-io.on('connection', function(socket){
-
-  // console.log("you're on sockets")
-
-  // fires when room is hit
-  socket.on('room', function(data) {
-    // console.log("you've reached room", data.room)
-    socket.join(data.room);
-  });
-
-  // first when text is entered
-  socket.on('text', function(data) {
-    socket.broadcast.to(data.room).emit('receive text',
-      data)
-      // console.log('some dude wrote', data.text)
-  })
 });
 
 server.listen(process.env.PORT || 9000);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchUser, fetchAttendants, fetchEvents } from '../actions/index';
+import { fetchUser, fetchAttendants, fetchEvents, createEvent } from '../actions/index';
 import EventsNew from './events_new'
 
 import CalendarDay from './calendar_day';
@@ -28,7 +28,10 @@ class Calendar extends Component {
   }
 
   refetchEvents(){
+    console.log('refetch')
     this.props.fetchEvents(this.props.params.id)
+    CalendarDay.forceUpdate()
+    EventsNew.forceUpdate()
   }
 
   dayOfWeek = ['Sunday',
@@ -52,7 +55,6 @@ class Calendar extends Component {
     if (day.length === 0){
       day.push({date: current, attendant: {first_name: '', last_name: ''}, title: ''})
     }
-    // console.log('day', day)
     return this.dayBuilder(day)
   }
 
@@ -63,7 +65,6 @@ class Calendar extends Component {
       let time = (new Date(events[i].date)).getHours()
       daysEvents[time] = events[i]
     }
-    // console.log(daysEvents)
     for (let i = 5; i <=23; i ++){
       if (daysEvents[i]){
         fullDay.push({
@@ -165,7 +166,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchUser, fetchAttendants, fetchEvents }, dispatch); //makes sure action flows to reducers
+  return bindActionCreators({ fetchUser, fetchAttendants, fetchEvents, createEvent }, dispatch); //makes sure action flows to reducers
 }
 // { fetchUser, fetchAttendants }
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

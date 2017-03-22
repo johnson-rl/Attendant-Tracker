@@ -8,14 +8,10 @@ export const DELETE_ATTENDANT = 'DELETE_ATTENDANT';
 export const UPDATE_ATTENDANT = 'UPDATE_ATTENDANT';
 export const FETCH_EVENTS = 'FETCH_EVENTS';
 export const CREATE_EVENTS = 'CREATE_EVENTS';
+export const SEND_SMS = 'SEND_SMS'
 
 // TODO for api call to backend will need to be changed
-const ROOT_URL = 'http://localhost:9000/api'
-
-// for later when api call with auth
-// const ROOT_URL = `http://api.openweathermap.org/data/2.5/forecast?appid=${API_KEY}`;
-
-// by setting to variable, you will save yourself from some bugs...no need to remember or copy/paste strings
+const ROOT_URL = 'https://sheltered-atoll-84768.herokuapp.com/api/'
 
 
 export function fetchUser(id) {
@@ -86,11 +82,19 @@ export function fetchEvents (id) {
 }
 
 export function createEvent(id, props){
-  console.log('action props',props.attendant.id)
   const request = axios.post(`${ROOT_URL}/users/${id}/attendants/${props.attendant.id}/events`, props)
 
   return {
     type: CREATE_EVENTS,
+    payload: request
+  }
+}
+
+export function sendSms(props){
+  const request = axios.post(`${ROOT_URL}/sms`, props)
+
+  return {
+    type: SEND_SMS,
     payload: request
   }
 }

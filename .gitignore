@@ -19,3 +19,5 @@ yarn-error.log*
 REACT_README.md
 
 bacon.properties
+
+secrets.sh
