@@ -74,7 +74,9 @@ class Attendant extends Component {
       <div className="container">
         <div className="row">
           <div className="four columns center-text">
-            <UserInfo user={this.props.attendant}/>
+            <UserInfo
+              user={this.props.attendant}
+              image="https://leafii.com/images/defaultProfilePic.png"/>
             <div className="row">
               {this.state.deleteCheck ?
                 <div>

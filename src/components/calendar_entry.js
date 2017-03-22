@@ -1,6 +1,7 @@
 import React from 'react';
 
 const CalendarEntry = (props) => {
+  console.log(props)
   return(
     <div className="cal-item">
       <p className="hour-text">{props.time}</p>
