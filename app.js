@@ -1,13 +1,23 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 const DB = require("./server/models");
 const User = require('./server/models').User;
 const Attendant = require('./server/models').Attendant;
 const Event = require('./server/models').Event;
 const app = express();
 
+const corsOptions = {
+  origin: '*',
+  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}
+
+
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
