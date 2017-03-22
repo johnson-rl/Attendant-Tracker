@@ -24,25 +24,7 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      AttendantId: {
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'Attendants',
-          key: 'id',
-          as: 'attendants',
-        },
-      },
-      // eventId: {
-      //   type: Sequelize.INTEGER,
-      //   onDelete: 'CASCADE',
-      //   references: {
-      //     model: 'Event',
-      //     key: 'id',
-      //     as: 'events',
-      //   },
-      // },
+      }
     });
   },
   down: function(queryInterface, Sequelize) {

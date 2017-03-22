@@ -6,14 +6,8 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Event.belongsTo(models.User, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE',
-        });
-        Event.belongsTo(models.Attendant, {
-          foreignKey: 'attendantId',
-          onDelete: 'CASCADE'
-        });
+        Event.belongsTo(models.User, {onDelete: 'CASCADE'});
+        Event.belongsTo(models.Attendant, {onDelete: 'CASCADE'});
       }
     }
   });

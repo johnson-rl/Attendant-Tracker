@@ -7,11 +7,8 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        // User.hasMany(models.Event, {
-        //   foreignKey: 'eventId',
-        //   as: 'events',
-        // });
         User.hasMany(models.Attendant, {as: 'attendants'});
+        User.hasMany(models.Event, {as: 'events'});
       }
     }
   });

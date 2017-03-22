@@ -9,10 +9,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Attendant.belongsTo(models.User, {onDelete: 'CASCADE'});
-        // Attendant.hasMany(models.Event, {
-        //   foreignKey: 'eventId',
-        //   as: 'events',
-        // });
+        Attendant.hasMany(models.Event, {as: 'events'})
       }
     }
   });

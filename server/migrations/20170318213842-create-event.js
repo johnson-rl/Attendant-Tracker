@@ -22,20 +22,20 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      attendantId: {
+      AttendantId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
-          model: 'Attendant',
+          model: 'Attendants',
           key: 'id',
           as: 'attendantId',
         },
       },
-      userId: {
+      UserId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
-          model: 'User',
+          model: 'Users',
           key: 'id',
           as: 'userId',
         },

@@ -36,16 +36,7 @@ module.exports = {
           key: 'id',
           as: 'UserId',
         },
-      },
-      // eventId: {
-      //   type: Sequelize.INTEGER,
-      //   onDelete: 'CASCADE',
-      //   references: {
-      //     model: 'Event',
-      //     key: 'id',
-      //     as: 'eventId',
-      //   },
-      // },
+      }
     });
   },
   down: function(queryInterface, Sequelize) {
