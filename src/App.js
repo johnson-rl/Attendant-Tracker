@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 class App extends Component {
+  static propTypes = {
+    children: PropTypes.node
+  }
   render() {
     return (
       <div>

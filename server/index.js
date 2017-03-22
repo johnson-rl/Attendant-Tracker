@@ -163,22 +163,22 @@ io.on('connection', function(socket){
 ///SMS///
 /////////
 
-const accountSid = process.env.TWILIO_KEY;
-const authToken = process.env.TWILIO_TOKEN;
-
-const twilio = require('twilio');
-const client = new twilio.RestClient(accountSid, authToken);
-
-app.post('/api/sms', (req, res)=> {
-  client.messages.create({
-      body: req.body.message || 'hello from twilio',
-      to: process.env.RECIPIENT_NUMBER,
-      from: process.env.TWILIO_NUMBER
-  }, function(err, message) {
-      console.log(message.sid);
-  });
-  res.send('sent')
-})
+// const accountSid = process.env.TWILIO_KEY;
+// const authToken = process.env.TWILIO_TOKEN;
+//
+// const twilio = require('twilio');
+// const client = new twilio.RestClient(accountSid, authToken);
+//
+// app.post('/api/sms', (req, res)=> {
+//   client.messages.create({
+//       body: req.body.message || 'hello from twilio',
+//       to: process.env.RECIPIENT_NUMBER,
+//       from: process.env.TWILIO_NUMBER
+//   }, function(err, message) {
+//       console.log(message.sid);
+//   });
+//   res.send('sent')
+// })
 
 ///////////////
 //CLIENT-SIDE//
