@@ -1,12 +1,12 @@
 import React from 'react';
 
 
-const UserInfo = (user) => {
+const UserInfo = (user, image) => {
 
     return (
       <div className=" center-text">
         <div className="row">
-          <img className="profile-image" src="https://leafii.com/images/defaultProfilePic.png"/>
+          <img className="profile-image" src={user.image} />
         </div>
         <div className="row">
           <h5>{user.user.first_name + " " + user.user.last_name}</h5>

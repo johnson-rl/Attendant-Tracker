@@ -7,12 +7,14 @@
 }
 
 .list-group-item {
-  border: solid black 1px;
+  /*border: solid lightgrey 1px;*/
+  border-bottom: solid lightgrey 1px;
   list-style: none;
 }
 
-.list-group-item:hover {
-  background-color: rgb(235,235,235);
+.clickable-list:hover {
+  box-shadow: 5px 5px 2px lightgrey;
+  background-color: rgb(250,250,250);
 }
 
 .profile-image {
@@ -92,3 +94,17 @@
 .full-width {
   width: 90%;
 }
+
+th,
+td {
+  padding: 0px;
+ }
+
+ .event-submit {
+   margin-top: 10px;
+ }
+
+ .welcome-title {
+   margin-left: 10%;
+   font-size: 3em;
+ }

@@ -25,7 +25,7 @@ class AttendantListItem extends Component  {
     const attendant = this.props.attendant
 
     return (
-      <li className="list-group-item">
+      <li className="list-group-item clickable-list">
         <a href={this.props.removeAttendants ? null : `/attendants/${attendant.id}`}>
           <div className="row container">
             <div className="three columns">
