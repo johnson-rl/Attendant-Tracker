@@ -55,7 +55,6 @@ class Calendar extends Component {
     if (day.length === 0){
       day.push({date: current, attendant: {first_name: '', last_name: ''}, title: ''})
     }
-    // console.log('day', day)
     return this.dayBuilder(day)
   }
 
@@ -66,7 +65,6 @@ class Calendar extends Component {
       let time = (new Date(events[i].date)).getHours()
       daysEvents[time] = events[i]
     }
-    // console.log(daysEvents)
     for (let i = 5; i <=23; i ++){
       if (daysEvents[i]){
         fullDay.push({

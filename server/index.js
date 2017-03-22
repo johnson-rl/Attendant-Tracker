@@ -153,22 +153,17 @@ app.delete('/api/events/:id', function(req, res){
 //SOCKETS//
 ///////////
 
-// Fires when socket connection made
 io.on('connection', function(socket){
-
-  // console.log("you're on sockets")
 
   // fires when room is hit
   socket.on('room', function(data) {
-    // console.log("you've reached room", data.room)
     socket.join(data.room);
   });
 
-  // first when text is entered
+  // fires when text is entered
   socket.on('text', function(data) {
     socket.broadcast.to(data.room).emit('receive text',
       data)
-      // console.log('some dude wrote', data.text)
   })
 });
 
