@@ -53,8 +53,10 @@ app.get("/api/users/:id", function(req, res){
 
 // Get an attendant
 app.get("/api/attendants/:id", function(req, res){
-  Attendant.findById(req.params.id, { include: [ events ] } ).then(function(attendant){
-    res.json(attendant);
+  Attendant.findById(req.params.id, {include: { model: Event, as: 'events' } }).then(function(attendant){
+      console.log('attending to events', attendant)
+      res.json(attendant);
+    // });
   });
 });
 
@@ -107,7 +109,7 @@ app.delete("/api/attendants/:id", function(req, res){
 app.get("/api/users/:id/events", function(req, res){
   User.findById(req.params.id).then(function(user){
     console.log(user)
-    user.getEvents({ include: [ Attendant ] }).then(function(events){
+    user.getEvents({ include: { model: Attendant } }).then(function(events){
       res.json(events)
     })
   });
@@ -120,7 +122,7 @@ app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, re
       Event.create(req.body).then(function(event){
         user.addEvent(event)
         attendant.addEvent(event)
-        user.getEvents({ include: [ Attendant ] }).then(function(events){
+        user.getEvents({ include: { model: Attendant } }).then(function(events){
           res.json(events)
         })
       })
