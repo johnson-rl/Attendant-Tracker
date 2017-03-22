@@ -41,10 +41,19 @@ app.set('port', port);
 const server = http.createServer(app);
 const models = require('./server/models')
 
-models.sequelize.sync().then(function () {
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
+const pg = require('pg');
+
+pg.defaults.ssl = true;
+pg.connect(process.env.DATABASE_URL, function(err, client) {
+  if (err) throw err;
+  console.log('Connected to postgres! Getting schemas...');
+
+  models.sequelize.sync().then(function () {
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+  });
+
 });
 
 function onError(error) { console.log('server error') }
