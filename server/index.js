@@ -6,19 +6,12 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
 const cors = require('cors');
-
 const DB = require("./db/connection");
 const User = DB.models.User;
 const Attendant = DB.models.Attendant;
 const Event = DB.models.Event;
-
-
-
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 const corsOptions = {
   origin: '*',
@@ -28,13 +21,11 @@ const corsOptions = {
   optionsSuccessStatus: 204
 }
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
-// Setup logger
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
-
-// Serve static assets
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
-
 
 //////////////////////////////
 //////******ROUTES******//////
@@ -46,6 +37,7 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 // Get all users
 app.get("/api/users", function(req, res){
+  console.log('request',req,'response', res)
   User.findAll().then(function(user){
     res.json(user);
   });
@@ -171,24 +163,22 @@ io.on('connection', function(socket){
 ///SMS///
 /////////
 
-const accountSid = process.env.TWILIO_KEY;
-const authToken = process.env.TWILIO_TOKEN;
-
-const twilio = require('twilio');
-const client = new twilio.RestClient(accountSid, authToken);
-
-app.post('/api/sms', (req, res)=> {
-  client.messages.create({
-      body: req.body.message || 'hello from twilio',
-      to: process.env.RECIPIENT_NUMBER,
-      from: process.env.TWILIO_NUMBER
-  }, function(err, message) {
-      console.log(message.sid);
-  });
-  res.send('sent')
-})
-
-
+// const accountSid = process.env.TWILIO_KEY;
+// const authToken = process.env.TWILIO_TOKEN;
+//
+// const twilio = require('twilio');
+// const client = new twilio.RestClient(accountSid, authToken);
+//
+// app.post('/api/sms', (req, res)=> {
+//   client.messages.create({
+//       body: req.body.message || 'hello from twilio',
+//       to: process.env.RECIPIENT_NUMBER,
+//       from: process.env.TWILIO_NUMBER
+//   }, function(err, message) {
+//       console.log(message.sid);
+//   });
+//   res.send('sent')
+// })
 
 ///////////////
 //CLIENT-SIDE//

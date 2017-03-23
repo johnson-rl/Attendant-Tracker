@@ -10,8 +10,7 @@ export const FETCH_EVENTS = 'FETCH_EVENTS';
 export const CREATE_EVENTS = 'CREATE_EVENTS';
 export const SEND_SMS = 'SEND_SMS'
 
-// TODO for api call to backend will need to be changed
-const ROOT_URL = 'https://sheltered-atoll-84768.herokuapp.com/api/'
+const ROOT_URL = 'https://sheltered-atoll-84768.herokuapp.com/api'
 
 
 export function fetchUser(id) {
