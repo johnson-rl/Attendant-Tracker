@@ -6,6 +6,10 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
 const cors = require('cors');
+const DB = require("./db/connection");
+const User = DB.models.User;
+const Attendant = DB.models.Attendant;
+const Event = DB.models.Event;
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
@@ -27,7 +31,115 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 //////******ROUTES******//////
 //////////////////////////////
 
-server.listen(process.env.PORT || 9000);
+///////////////
+//USER ROUTES//
+///////////////
+
+// Get all users
+app.get("/api/users", function(req, res){
+  console.log('request',req,'response', res)
+  User.findAll().then(function(user){
+    res.json(user);
+  });
+});
+
+// Create a user
+app.post("/api/users", function(req, res){
+  User.create(req.body).then(function(user){
+    res.json(user)
+  });
+});
+
+// Get one user
+app.get("/api/users/:id", function(req, res){
+  User.findById(req.params.id).then(function(user){
+    res.json(user)
+  });
+});
+
+////////////////////
+//ATTENDANT ROUTES//
+////////////////////
+
+// Get an attendant
+app.get("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id, { include: [ Event ] } ).then(function(attendant){
+    res.json(attendant);
+  });
+});
+
+// Get all attendants for one user
+app.get("/api/users/:id/attendants", function(req, res){
+  User.findById(req.params.id).then(function(user){
+    user.getAttendants().then(function(attendants){
+      res.json(attendants)
+    })
+  });
+});
+
+// Save an attendant
+app.post("/api/users/:id/attendants", function(req, res){
+  Attendant.create(req.body).then(function(attendant){
+    User.findById(req.params.id).then(function(user){
+      user.addAttendant(attendant);
+      res.json(attendant)
+    })
+  });
+});
+
+// Edit an attendant
+
+app.put("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id).then(function(attendant){
+    attendant.update(req.body)
+    res.send(attendant)
+  })
+})
+
+// Delete an attendant
+app.delete("/api/attendants/:id", function(req, res){
+  Attendant.findById(req.params.id).then(function(attendant){
+    attendant.destroy()
+    res.send(attendant)
+  })
+})
+
+////////////////
+//EVENT ROUTES//
+////////////////
+
+// Get all of a User's events
+app.get("/api/users/:id/events", function(req, res){
+  User.findById(req.params.id).then(function(user){
+    console.log(user)
+    user.getEvents({ include: [ Attendant ] }).then(function(events){
+      res.json(events)
+    })
+  });
+});
+
+// Create an event
+app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, res){
+  Attendant.findById(req.params.attendant_id).then(function(attendant){
+    User.findById(req.params.user_id).then(function(user){
+      Event.create(req.body).then(function(event){
+        user.addEvent(event)
+        attendant.addEvent(event)
+        user.getEvents({ include: [ Attendant ] }).then(function(events){
+          res.json(events)
+        })
+      })
+    })
+  });
+});
+
+// Delete an event
+app.delete('/api/events/:id', function(req, res){
+  Event.findById(req.params.id).then(function(event){
+    event.destroy()
+    res.json(event)
+  })
+})
 
 ///////////
 //SOCKETS//
@@ -76,3 +188,5 @@ io.on('connection', function(socket){
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
+
+server.listen(process.env.PORT || 9000);
