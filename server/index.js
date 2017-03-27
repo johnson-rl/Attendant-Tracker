@@ -9,23 +9,25 @@ const cors = require('cors');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-// const corsOptions = {
-//   origin: '*',
-//   allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
-//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//   preflightContinue: false,
-//   optionsSuccessStatus: 204
-// }
+const corsOptions = {
+  origin: '*',
+  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 //////////////////////////////
 //////******ROUTES******//////
 //////////////////////////////
+
+server.listen(process.env.PORT || 9000);
 
 ///////////
 //SOCKETS//
@@ -74,5 +76,3 @@ io.on('connection', function(socket){
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
-
-server.listen(process.env.PORT || 9000);
