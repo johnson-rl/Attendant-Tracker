@@ -30,7 +30,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.set('port', port);
-app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+app.use(express.static(path.resolve(__dirname, './react-ui/build')));
 
 
 
@@ -207,5 +207,6 @@ io.on('connection', function(socket){
 // Redirects all other routes for client side routing
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
+  console.log(path.resolve(__dirname, './react-ui/build', 'index.html'))
+  res.sendFile(path.resolve(__dirname, './react-ui/build', 'index.html'));
 });
