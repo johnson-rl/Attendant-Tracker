@@ -1,5 +1,4 @@
 const http = require('http');
-const port = parseInt(process.env.PORT, 10) || 8000;
 const models = require('./server/models')
 const express = require('express');
 const app = express();
@@ -30,19 +29,19 @@ app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.set('port', port);
+// app.set('port', port);
 app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
 
 
 models.sequelize.sync().then(function () {
-  server.listen(port);
+  server.listen(process.env.PORT || 9000);
   server.on('error', onError);
   server.on('listening', onListening);
 });
 
 function onError(error) { console.log('server error') }
-function onListening() { console.log('you are now listening on', port) }
+function onListening() { console.log('you are now listening on', (process.env.PORT || 9000)) }
 
 ///////////////
 //USER ROUTES//
