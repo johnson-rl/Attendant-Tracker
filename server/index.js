@@ -10,7 +10,8 @@ const DB = require("./db/connection");
 const User = DB.models.User;
 const Attendant = DB.models.Attendant;
 const Event = DB.models.Event;
-const server = require('http').createServer(app);
+// const server = require('http').createServer(app);
+const server = app.listen(process.env.PORT || 9000)
 const io = require('socket.io').listen(server)
 
 // const socketIO = require('socket.io');
@@ -160,11 +161,13 @@ io.on('connection', function(socket){
 
   // fires when room is hit
   socket.on('room', function(data) {
+    console.log("DATA", data)
     socket.join(data.room);
   });
 
   // fires when text is entered
   socket.on('text', function(data) {
+    console.log("DATA", data)
     socket.broadcast.to(data.room).emit('receive text',
       data)
   })
@@ -200,4 +203,4 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
 
-server.listen(process.env.PORT || 9000);
+// server.listen(process.env.PORT || 9000);

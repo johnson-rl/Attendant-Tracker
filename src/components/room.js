@@ -30,6 +30,7 @@ class Room extends Component {
 
   componentWillMount(){
     socket.emit('room', {room: 34})
+    console.log('emitted')
   }
 
   componentDidUpdate() {
@@ -52,6 +53,7 @@ class Room extends Component {
       room: 34,
       text: this.state.term
       })
+      console.log('emitted', this.state.term)
     this.setState({chat: [...this.state.chat, this.state.term], term: ""})
   }
 
