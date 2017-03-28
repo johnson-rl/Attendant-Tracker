@@ -11,8 +11,18 @@ const User = DB.models.User;
 const Attendant = DB.models.Attendant;
 const Event = DB.models.Event;
 const server = require('http').createServer(app);
-const socketIO = require('socket.io');
-const io = socketIO(server);
+const io = require('socket.io').listen(server)
+
+// const socketIO = require('socket.io');
+// const io = socketIO(server);
+
+// var express = require('express'),
+//     app = express(),
+//     server = require('http').createServer(app),
+//     ,
+//
+// server.listen(process.env.PORT || 3000);
+
 
 const corsOptions = {
   origin: '*',
