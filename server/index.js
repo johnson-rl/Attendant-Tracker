@@ -14,6 +14,9 @@ const Event = DB.models.Event;
 const server = app.listen(process.env.PORT || 9000)
 const io = require('socket.io').listen(server)
 
+
+io.set('origins', '*:*');
+io.set('match origin protocol', true);
 // const socketIO = require('socket.io');
 // const io = socketIO(server);
 
