@@ -1,17 +1,18 @@
-'use strict';
-
-const express = require("express");
+const express = require('express');
 const app = express();
 const path = require("path");
-const bodyParser = require("body-parser");
-const morgan = require('morgan');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
 const cors = require('cors');
-const DB = require("./db/connection");
-const User = DB.models.User;
-const Attendant = DB.models.Attendant;
-const Event = DB.models.Event;
+const DB = require("./server/models");
+const User = require('./server/models').User;
+const Attendant = require('./server/models').Attendant;
+const Event = require('./server/models').Event;
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io').listen(server)
+
+io.set('origins', '*:*');
+io.set('match origin protocol', true);
 
 const corsOptions = {
   origin: '*',
@@ -21,15 +22,11 @@ const corsOptions = {
   optionsSuccessStatus: 204
 }
 
+
+app.use(cors(corsOptions));
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors(corsOptions));
-app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
-app.use(express.static(path.resolve(__dirname, '..', 'build')));
-
-//////////////////////////////
-//////******ROUTES******//////
-//////////////////////////////
 
 ///////////////
 //USER ROUTES//
@@ -37,7 +34,6 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 // Get all users
 app.get("/api/users", function(req, res){
-  console.log('request',req,'response', res)
   User.findAll().then(function(user){
     res.json(user);
   });
@@ -63,7 +59,15 @@ app.get("/api/users/:id", function(req, res){
 
 // Get an attendant
 app.get("/api/attendants/:id", function(req, res){
-  Attendant.findById(req.params.id, { include: [ Event ] } ).then(function(attendant){
+  Attendant.findById(req.params.id, {include: { model: Event, as: 'events' } }).then(function(attendant){
+      console.log('attending to events', attendant)
+      res.json(attendant);
+    // });
+  });
+});
+
+app.get("/api/attendants", function(req, res){
+  Attendant.findAll().then(function(attendant){
     res.json(attendant);
   });
 });
@@ -88,7 +92,6 @@ app.post("/api/users/:id/attendants", function(req, res){
 });
 
 // Edit an attendant
-
 app.put("/api/attendants/:id", function(req, res){
   Attendant.findById(req.params.id).then(function(attendant){
     attendant.update(req.body)
@@ -112,7 +115,7 @@ app.delete("/api/attendants/:id", function(req, res){
 app.get("/api/users/:id/events", function(req, res){
   User.findById(req.params.id).then(function(user){
     console.log(user)
-    user.getEvents({ include: [ Attendant ] }).then(function(events){
+    user.getEvents({ include: { model: Attendant } }).then(function(events){
       res.json(events)
     })
   });
@@ -125,7 +128,7 @@ app.post("/api/users/:user_id/attendants/:attendant_id/events", function(req, re
       Event.create(req.body).then(function(event){
         user.addEvent(event)
         attendant.addEvent(event)
-        user.getEvents({ include: [ Attendant ] }).then(function(events){
+        user.getEvents({ include: { model: Attendant } }).then(function(events){
           res.json(events)
         })
       })
@@ -149,11 +152,13 @@ io.on('connection', function(socket){
 
   // fires when room is hit
   socket.on('room', function(data) {
+    console.log("DATA", data)
     socket.join(data.room);
   });
 
   // fires when text is entered
   socket.on('text', function(data) {
+    console.log("DATA", data)
     socket.broadcast.to(data.room).emit('receive text',
       data)
   })
@@ -185,8 +190,9 @@ io.on('connection', function(socket){
 ///////////////
 
 // Redirects all other routes for client side routing
+
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
 });
 
-server.listen(process.env.PORT || 9000);
+module.exports = app;
