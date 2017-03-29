@@ -8,12 +8,15 @@ class Room extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {chat: [], term: ""};
-    // binds onInputChange to "this", which in this particular context is SearchBar
+    this.state = {chat: [],
+                  term: "",
+                  active: false,
+                  initials: ""};
+
+    this.onInitialsChange = this.onInitialsChange.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.onInputSubmit = this.onInputSubmit.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    // this.onFormSubmit = this.onFormSubmit.bind(this); // also need to bind submit
     socket.on('receive text', (payload) => {
         this.updateTextFromSockets(payload);
       })
@@ -37,6 +40,15 @@ class Room extends Component {
     this.scrollToBottom();
   }
 
+  onInitialsChange(event){
+    this.setState({initials: event.target.value})
+    if(this.state.initials.length >1){
+      console.log(this.state.initials)
+      this.setState({active:true})
+      this.onInputSubmit()
+    }
+  }
+
   onInputChange(event) {
     this.setState({term: event.target.value})
   }
@@ -49,12 +61,14 @@ class Room extends Component {
   }
 
   onInputSubmit() {
+    let text = this.state.term || `${this.state.initials} has joined`
     socket.emit('text', {
       room: 34,
-      text: this.state.term
+      text: text,
+      initials: this.state.initials
       })
       console.log('emitted', this.state.term)
-    this.setState({chat: [...this.state.chat, this.state.term], term: ""})
+    this.setState({chat: [...this.state.chat, text], term: ""})
   }
 
 
@@ -66,6 +80,15 @@ class Room extends Component {
     return (
       <div>
         <div className="container">
+          <div className="row">
+            <div className="two columns offset-by-five">
+              <input
+                className={this.state.active ? "hidden" : "initials"}
+                value={this.state.initials}
+                onChange={this.onInitialsChange}
+              />
+            </div>
+          </div>
           <div className="row">
             <div className="ten columns offset-by-one">
               <div className="container chat-box">
@@ -88,7 +111,8 @@ class Room extends Component {
           </div>
           <div className="center-text">
             <button
-              className="button-primary"
+              disabled={!this.state.active}
+              className={this.state.active ? "button-primary" : "button"}
               onClick={this.onInputSubmit}
               >Send</button>
           </div>

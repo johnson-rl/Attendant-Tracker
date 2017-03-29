@@ -85,7 +85,7 @@
 
 .chat-box {
   border: solid lightgrey 1px;
-  height: 400px;
+  height: 300px;
   margin-bottom: 2em;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -108,3 +108,7 @@ td {
    margin-left: 10%;
    font-size: 3em;
  }
+
+.hidden {
+  display: none;
+}
