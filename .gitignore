@@ -21,3 +21,8 @@ REACT_README.md
 bacon.properties
 
 secrets.sh
+
+db-rebuild
+old_server_files
+react-ui/build
+react-ui/node_modules
